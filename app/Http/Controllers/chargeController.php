@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Factory;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\View;
+use Illuminate\View\View;
 
 use App\tm_charge;
 use App\tm_request;
@@ -35,7 +35,7 @@ class chargeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(): Factory|RedirectResponse|View
+    public function index(): RedirectResponse|View
     {
         if (auth()->user()->hasAnyRole(['admin', 'super', 'cashier']) != true) {
             return redirect()->route('request.index');
@@ -68,11 +68,12 @@ class chargeController extends Controller
         return view('charge.index', compact('data'));
     }
 
-    public function checkInternet() {
-        $connected = @fsockopen("www.google.com", 80); 
+    public function checkInternet()
+    {
+        $connected = @fsockopen("www.google.com", 80);
         if ($connected) {
             fclose($connected);
-            return true; 
+            return true;
         }
         return false;
     }
@@ -219,41 +220,44 @@ class chargeController extends Controller
                 $charge_data['charge']['tx_client_point'],
             );
         }
+        if ($request->input('e') > 0) {
+            $response = $this->fe_send(
+                $charge_data['charge']['tx_charge_number'],
+                $charge_data['charge']['created_at'],
+                $charge_data['charge']['tx_client_type'],
+                $charge_data['charge']['tx_client_taxpayer'],
+                $charge_data['charge']['tx_client_cif'],
+                $charge_data['charge']['tx_client_dv'],
+                $charge_data['charge']['tx_client_name'],
+                $charge_data['charge']['tx_client_direction'],
+                $charge_data['charge']['tx_client_telephone'],
+                $charge_data['charge']['tx_client_email'],
+                $charge_data['article'],
+                $charge_data['charge']['tx_charge_nontaxable'] + $charge_data['charge']['tx_charge_taxable'],
+                $charge_data['charge']['tx_charge_tax'],
+                $charge_data['charge']['tx_charge_discount'],
+                $charge_data['charge']['tx_charge_total'],
+                $charge_data['payment'],
+                $charge_data['charge']['tx_charge_change']
+            );
 
-        $response = $this->fe_send(
-            $charge_data['charge']['tx_charge_number'],
-            $charge_data['charge']['created_at'],
-            $charge_data['charge']['tx_client_type'],
-            $charge_data['charge']['tx_client_taxpayer'],
-            $charge_data['charge']['tx_client_cif'],
-            $charge_data['charge']['tx_client_dv'],
-            $charge_data['charge']['tx_client_name'],
-            $charge_data['charge']['tx_client_direction'],
-            $charge_data['charge']['tx_client_telephone'],
-            $charge_data['charge']['tx_client_email'],
-            $charge_data['article'],
-            $charge_data['charge']['tx_charge_nontaxable'] + $charge_data['charge']['tx_charge_taxable'],
-            $charge_data['charge']['tx_charge_tax'],
-            $charge_data['charge']['tx_charge_discount'],
-            $charge_data['charge']['tx_charge_total'],
-            $charge_data['payment'],
-            $charge_data['charge']['tx_charge_change']
-        );
 
-        
-        $xml = simplexml_load_string(str_replace(["s:", "a:", "i:"], "", $response));
-        $xml = json_decode(json_encode($xml), true);
-        $responseFE = $xml['Body']['EnviarResponse']['EnviarResult'];
+            $xml = simplexml_load_string(str_replace(["s:", "a:", "i:"], "", $response));
+            $xml = json_decode(json_encode($xml), true);
+            $responseFE = $xml['Body']['EnviarResponse']['EnviarResult'];
 
-        if ($responseFE['resultado'] === 'error') {
-            return response()->json(['status' => 'failed', 'message' => $responseFE['mensaje']]);
-        } else {
-            $this->print_fe($charge_data['charge']['tx_charge_number'], $charge_data['charge']['created_at'], $charge_data['charge']['tx_client_name'], $charge_data['charge']['tx_client_cif'] . ' DV' . $charge_data['charge']['tx_client_dv'], $charge_data['article'], $charge_data['charge']['tx_charge_nontaxable'] + $charge_data['charge']['tx_charge_taxable'], $charge_data['charge']['tx_charge_discount'], $charge_data['charge']['tx_charge_tax'], $charge_data['charge']['tx_charge_total'], $charge_data['payment'], $charge_data['charge']['tx_charge_change'], $charge_data['charge']['user_name'], $birthday_congrats, $charge_data['charge']['tx_charge_tip'], $charge_data['charge']['tx_client_point'], $responseFE);
+            if ($responseFE['resultado'] === 'error') {
+                $this->print_command($charge_data['charge']['tx_charge_number'], $charge_data['charge']['created_at'], $charge_data['charge']['tx_client_name'], $charge_data['charge']['tx_client_cif'] . ' DV' . $charge_data['charge']['tx_client_dv'], $charge_data['article']);
+                $this->print_receipt($charge_data['charge']['tx_charge_number'], $charge_data['charge']['created_at'], $charge_data['charge']['tx_client_name'], $charge_data['charge']['tx_client_cif'] . ' DV' . $charge_data['charge']['tx_client_dv'], $charge_data['article'], $charge_data['charge']['tx_charge_nontaxable'] + $charge_data['charge']['tx_charge_taxable'], $charge_data['charge']['tx_charge_discount'], $charge_data['charge']['tx_charge_tax'], $charge_data['charge']['tx_charge_total'], $charge_data['payment'], $charge_data['charge']['tx_charge_change'], $charge_data['charge']['user_name'], $birthday_congrats, $charge_data['charge']['tx_charge_tip'], $charge_data['charge']['tx_client_point']);
+                return response()->json(['status' => 'failed', 'message' => $responseFE['mensaje']]);
+            } else {
+                tm_charge::where('ai_charge_id', $charge_id)->update(['tx_charge_ticket' => $responseFE['cufe']]);
+                $this->print_fe($charge_data['charge']['tx_charge_number'], $charge_data['charge']['created_at'], $charge_data['charge']['tx_client_name'], $charge_data['charge']['tx_client_cif'] . ' DV' . $charge_data['charge']['tx_client_dv'], $charge_data['article'], $charge_data['charge']['tx_charge_nontaxable'] + $charge_data['charge']['tx_charge_taxable'], $charge_data['charge']['tx_charge_discount'], $charge_data['charge']['tx_charge_tax'], $charge_data['charge']['tx_charge_total'], $charge_data['payment'], $charge_data['charge']['tx_charge_change'], $charge_data['charge']['user_name'], $birthday_congrats, $charge_data['charge']['tx_charge_tip'], $charge_data['charge']['tx_client_point'], $responseFE);
+            }
         }
-
         return response()->json(['status' => 'success', 'message' => 'Pedido cobrado satisfactoriamente.', 'data' => ['slug' => $charge_slug]]);
     }
-    public function print_fe        ($number, $date, $client_name, $client_ruc, $raw_item, $subtotal, $discount, $tax, $total, $raw_payment, $change, $user_name, $birthday_congrats, $tip, $point, $response)
+    public function print_fe($number, $date, $client_name, $client_ruc, $raw_item, $subtotal, $discount, $tax, $total, $raw_payment, $change, $user_name, $birthday_congrats, $tip, $point, $response)
     {
         $connector = new NetworkPrintConnector("192.168.1.113", 9100);
         $printer = new Printer($connector);
@@ -265,65 +269,65 @@ class chargeController extends Controller
         $logo = EscposImage::load("./attached/image/logo_print2.png", 30);
 
         // PRINT TOP DATE
-        $printer -> setJustification(Printer::JUSTIFY_RIGHT);
-        $printer -> text(date('d-m-Y')."\n");
+        $printer->setJustification(Printer::JUSTIFY_RIGHT);
+        $printer->text(date('d-m-Y') . "\n");
 
         //  Print top logo
-        $printer -> setJustification(Printer::JUSTIFY_CENTER);
-        $printer -> bitImage($logo);
+        $printer->setJustification(Printer::JUSTIFY_CENTER);
+        $printer->bitImage($logo);
 
         // Name of shop
         $optionController = new optionController;
         $rs_option = $optionController->getOption();
 
-        $printer -> text($rs_option['SOCIETY']."\n");
-        $printer -> text($rs_option['RUC']." DV ".$rs_option['DV']."\n");
-        $printer -> text($rs_option['DIRECCION']."\n");
-        $printer -> text("Whatsapp: ".$rs_option['CEL']." Tel. ".$rs_option['TELEFONO']."\n");
-        $printer -> feed();
+        $printer->text($rs_option['SOCIETY'] . "\n");
+        $printer->text($rs_option['RUC'] . " DV " . $rs_option['DV'] . "\n");
+        $printer->text($rs_option['DIRECCION'] . "\n");
+        $printer->text("Whatsapp: " . $rs_option['CEL'] . " Tel. " . $rs_option['TELEFONO'] . "\n");
+        $printer->feed();
 
         // Title of receipt 
-        $printer -> selectPrintMode(Printer::MODE_DOUBLE_HEIGHT);
-        $printer -> setEmphasis(true);
-        $printer -> text("Facturación #".$number."\n");
-        $printer -> setEmphasis(false);
+        $printer->selectPrintMode(Printer::MODE_DOUBLE_HEIGHT);
+        $printer->setEmphasis(true);
+        $printer->text("Facturación #" . $number . "\n");
+        $printer->setEmphasis(false);
 
         // Client Info 
-        $printer -> selectPrintMode();
-        $printer -> text(date('d-m-Y h:i:s', strtotime($date))."\n");
-        $printer -> text("Cliente: ".$client_name."\n");
-        $printer -> text("RUC: ".$client_ruc."\n");
+        $printer->selectPrintMode();
+        $printer->text(date('d-m-Y h:i:s', strtotime($date)) . "\n");
+        $printer->text("Cliente: " . $client_name . "\n");
+        $printer->text("RUC: " . $client_ruc . "\n");
 
-        $printer -> setJustification(Printer::JUSTIFY_CENTER);
-        $printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
-        $printer -> text("COMANDA\n");
-        $printer -> selectPrintMode();
-        $printer -> setJustification(Printer::JUSTIFY_LEFT);
+        $printer->setJustification(Printer::JUSTIFY_CENTER);
+        $printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
+        $printer->text("COMANDA\n");
+        $printer->selectPrintMode();
+        $printer->setJustification(Printer::JUSTIFY_LEFT);
 
-        $printer -> feed(2);
+        $printer->feed(2);
 
         //  Items
-        $printer -> text("Articulos de la Comanda.\n");
+        $printer->text("Articulos de la Comanda.\n");
 
         $content_observation = '';
         $last_observation = '';
-        $command_id = 0 ;
+        $command_id = 0;
         // foreach ($raw_item as $item) {
         foreach ($raw_item as $key => $item) {
-            if ($item['tx_commanddata_status'] === 1) {  
+            if ($item['tx_commanddata_status'] === 1) {
 
-                $printer -> text($item['tx_article_code']." - ".$item['tx_commanddata_description']);
-                $printer -> selectPrintMode(Printer::MODE_DOUBLE_HEIGHT);
-                $printer -> setEmphasis(true);
-                $printer -> text(" (".$item['tx_presentation_value'].")\n");
-                $printer -> setEmphasis(false);
-                $printer -> selectPrintMode();
+                $printer->text($item['tx_article_code'] . " - " . $item['tx_commanddata_description']);
+                $printer->selectPrintMode(Printer::MODE_DOUBLE_HEIGHT);
+                $printer->setEmphasis(true);
+                $printer->text(" (" . $item['tx_presentation_value'] . ")\n");
+                $printer->setEmphasis(false);
+                $printer->selectPrintMode();
 
-                $printer -> selectPrintMode(Printer::MODE_DOUBLE_HEIGHT);
-                $printer -> setEmphasis(true);
-                $printer -> text($item['tx_commanddata_quantity']." x ".$item['tx_commanddata_price']."\n");
-                $printer -> setEmphasis(false);
-                $printer -> selectPrintMode();
+                $printer->selectPrintMode(Printer::MODE_DOUBLE_HEIGHT);
+                $printer->setEmphasis(true);
+                $printer->text($item['tx_commanddata_quantity'] . " x " . $item['tx_commanddata_price'] . "\n");
+                $printer->setEmphasis(false);
+                $printer->selectPrintMode();
 
                 $raw_recipe = json_decode($item['tx_commanddata_recipe'], true);
                 foreach ($raw_recipe as $ingredient) {
@@ -347,7 +351,7 @@ class chargeController extends Controller
         }
 
         // Cut the receipt
-        $printer -> cut();
+        $printer->cut();
 
         // ############ RECIBO FACTURA ELECTRONICA ############
 
@@ -471,7 +475,7 @@ class chargeController extends Controller
         $printer->close();
     }
 
-    public function print_charge    ($number, $date, $client_name, $client_ruc, $raw_item, $subtotal, $discount, $tax, $total, $raw_payment, $change, $user_name, $birthday_congrats, $tip, $point = 0)
+    public function print_charge($number, $date, $client_name, $client_ruc, $raw_item, $subtotal, $discount, $tax, $total, $raw_payment, $change, $user_name, $birthday_congrats, $tip, $point = 0)
     {
         $connector = new NetworkPrintConnector("192.168.1.113", 9100);
         $printer = new Printer($connector);
@@ -702,7 +706,7 @@ class chargeController extends Controller
         $printer->close();
     }
 
-    public function print_receipt   ($number, $date, $client_name, $client_ruc, $raw_item, $subtotal, $discount, $tax, $total, $raw_payment, $change, $user_name, $birthday_congrats, $tip, $point = 0)
+    public function print_receipt($number, $date, $client_name, $client_ruc, $raw_item, $subtotal, $discount, $tax, $total, $raw_payment, $change, $user_name, $birthday_congrats, $tip, $point = 0)
     {
         $connector = new NetworkPrintConnector("192.168.1.113", 9100);
         $printer = new Printer($connector);
@@ -829,7 +833,8 @@ class chargeController extends Controller
         $printer->cut();
         $printer->close();
     }
-    public function print_command ($number, $date, $client_name, $client_ruc, $raw_item){
+    public function print_command($number, $date, $client_name, $client_ruc, $raw_item)
+    {
         $connector = new NetworkPrintConnector("192.168.1.113", 9100);
         $printer = new Printer($connector);
 
@@ -922,19 +927,33 @@ class chargeController extends Controller
         $printer->cut();
 
     }
-    public function fe_send($number,$date,$client_type,$client_taxpayer,$client_ruc,$client_dv,$client_name,$client_direction,$client_telephone,$client_email,
-        $raw_item,$net_total,$total_tax,$total_discount,$total_charge,$raw_payment,$change,$client_country = 'Panama') {
+    public function fe_send(
+        $number,
+        $date,
+        $client_type,
+        $client_taxpayer,
+        $client_ruc,
+        $client_dv,
+        $client_name,
+        $client_direction,
+        $client_telephone,
+        $client_email,
+        $raw_item,
+        $net_total,
+        $total_tax,
+        $total_discount,
+        $total_charge,
+        $raw_payment,
+        $change,
+        $client_country = 'Panama'
+    ) {
 
         $optionController = new optionController;
         $rs_option = $optionController->getOption();
 
-        //$location = 'https://demoemision.thefactoryhka.com.pa/ws/obj/v1.0/Service.svc?wsdl';
         $location = 'https://emision.thefactoryhka.com.pa/ws/obj/v1.0/Service.svc';
         $t_company = $rs_option['FE_USER'];
         $t_pass = $rs_option['FE_PASSWORD'];
-        // $t_company = 'zblvgogrmgjv_tfhka';
-        // $t_pass = 'n*M,EcB2O_gg';
-
 
         $item_xml = '';
         $item_counter = 0;
@@ -944,7 +963,7 @@ class chargeController extends Controller
                 $ttl_discount = round($ttl_discount, 3);
                 $ttl_discount = round($ttl_discount, 2);
 
-                $ttl_tax = ($item['tx_commanddata_taxrate'] * ($item['tx_commanddata_price']-$ttl_discount)) / 100;
+                $ttl_tax = ($item['tx_commanddata_taxrate'] * ($item['tx_commanddata_price'] - $ttl_discount)) / 100;
                 $ttl_tax *= $item['tx_commanddata_quantity'];
                 $ttl_tax = round($ttl_tax, 3);
                 $ttl_tax = round($ttl_tax, 2);
@@ -1005,7 +1024,7 @@ class chargeController extends Controller
                 03:Tarjeta Crédito. 
                 04:Tarjeta Débito. 
                 01:Crédito. 
-                
+
                 99:Otro. 
                 05:Tarjeta Fidelización. 
                 06:Vale. 
@@ -1106,9 +1125,9 @@ class chargeController extends Controller
                                 <ser:totalValorRecibido>" . number_format($payment_total, 2) . "</ser:totalValorRecibido>
                                 <ser:vuelto>" . number_format($change, 2) . "</ser:vuelto>
                                 <ser:tiempoPago>1</ser:tiempoPago>
-                                <ser:nroItems>". $item_counter ."</ser:nroItems>
+                                <ser:nroItems>" . $item_counter . "</ser:nroItems>
                                 <ser:totalTodosItems>" . number_format($net_total + $total_tax, 2) . "</ser:totalTodosItems>
-                                ".$listaDescBonificacion."
+                                " . $listaDescBonificacion . "
                                 <ser:listaFormaPago>
                                     " . $payment_xml . "
                                 </ser:listaFormaPago>
@@ -1127,7 +1146,7 @@ class chargeController extends Controller
                 </soapenv:Body>
             </soapenv:Envelope>
         ";
-//return $request;
+        //return $request;
         $action = "Enviar";
         $header = [
             'Method: POST',
@@ -1151,15 +1170,23 @@ class chargeController extends Controller
 
     public function fe_left(): JsonResponse //FOLIOS RESTANTES
     {
+        $responseFE = $this->tfhka_folios_restantes();
+        if ($responseFE['resultado'] === 'error') {
+            return response()->json(['status' => 'failed', 'message' => $responseFE['mensaje']]);
+        } else {
+            return response()->json(['status' => 'success', 'data' => $responseFE]);
+        }
+
+    }
+    public function tfhka_folios_restantes()
+    {
         $optionController = new optionController;
         $rs_option = $optionController->getOption();
 
-        
+
         $location = 'https://emision.thefactoryhka.com.pa/ws/obj/v1.0/Service.svc';
-        // $t_company = $rs_option['FE_USER'];
-        // $t_pass = $rs_option['FE_PASSWORD'];
-        $t_company = 'zblvgogrmgjv_tfhka';
-        $t_pass = 'n*M,EcB2O_gg';
+        $t_company = $rs_option['FE_USER'];
+        $t_pass = $rs_option['FE_PASSWORD'];
 
         $request = "
             <soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:tem=\"http://tempuri.org/\">
@@ -1167,9 +1194,9 @@ class chargeController extends Controller
                 <soapenv:Body>
                     <tem:FoliosRestantes>
                         <!--Optional:-->
-                        <tem:tokenEmpresa>".$t_company."</tem:tokenEmpresa>
+                        <tem:tokenEmpresa>" . $t_company . "</tem:tokenEmpresa>
                         <!--Optional:-->
-                        <tem:tokenPassword>".$t_pass."</tem:tokenPassword>
+                        <tem:tokenPassword>" . $t_pass . "</tem:tokenPassword>
                     </tem:FoliosRestantes>
                 </soapenv:Body>
             </soapenv:Envelope>
@@ -1199,14 +1226,8 @@ class chargeController extends Controller
         $xml = simplexml_load_string(str_replace(["s:", "a:", "i:"], "", $response));
         $xml = json_decode(json_encode($xml), true);
         $responseFE = $xml['Body']['FoliosRestantesResponse']['FoliosRestantesResult'];
-        // return response()->json(['status' => 'success', 'data' => $responseFE]);
 
-        if ($responseFE['resultado'] === 'error') {
-            return response()->json(['status' => 'failed', 'message' => $responseFE['mensaje']]);
-        } else {
-            return response()->json(['status' => 'success', 'data' => $responseFE]);
-        }
-
+        return $responseFE;
     }
 
     /**

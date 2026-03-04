@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title','Caja')
+@section('title', 'Caja')
 @section('css')
   <link rel="stylesheet" href="{{ asset('attached/css/jquery-ui.css') }}">
 @endsection
@@ -41,11 +41,14 @@
               </div>
               <div class="col-md-12 col-lg-4">
                 <label for="cashoutputAmount">Monto</label>
-                <input type="text" name="cashoutputAmount" id="cashoutputAmount" class="form-control" placeholder="B/" onfocus="cls_general.validFranz(this.id, ['number'],'.')">
+                <input type="text" name="cashoutputAmount" id="cashoutputAmount" class="form-control" placeholder="B/"
+                  onfocus="cls_general.validFranz(this.id, ['number'],'.')">
               </div>
               <div class="col-md-12 col-lg-4">
                 <label for="cashoutputReason">Motivo</label>
-                <input type="text" name="cashoutputReason" id="cashoutputReason" class="form-control" placeholder="Motivo de la salida" onfocus="cls_general.validFranz(this.id, ['punctuation','mathematic','close','word','number'])">
+                <input type="text" name="cashoutputReason" id="cashoutputReason" class="form-control"
+                  placeholder="Motivo de la salida"
+                  onfocus="cls_general.validFranz(this.id, ['punctuation','mathematic','close','word','number'])">
               </div>
               <div class="col-md-12 text-center py-2">
                 <button type="submit" class="btn btn-primary btn-lg">Guardar</button>
@@ -55,7 +58,8 @@
           <div class="row">
             <div class="col-md-12 col-lg-6">
               <label for="cashoutputDatefilter">Fecha</label>
-              <input type="text" name="cashoutputDatefilter" id="cashoutputDatefilter" class="form-control" value="" onchange="cls_cashoutput.show(this.value)">
+              <input type="text" name="cashoutputDatefilter" id="cashoutputDatefilter" class="form-control" value=""
+                onchange="cls_cashoutput.show(this.value)">
             </div>
             {{-- <div class="col-md-12 col-lg-6 text-center pt-3">
               <button type="button" class="btn btn-info btn-lg">Imprimir</button>
@@ -95,7 +99,8 @@
             </div>
             <div class="col-md-12 col-lg-6">
               <label for="cashregisterDatefilter">Fecha</label>
-              <input type="text" name="cashregisterDatefilter" id="cashregisterDatefilter" class="form-control" value="" onchange="cls_cashregister.filter(this.value)">
+              <input type="text" name="cashregisterDatefilter" id="cashregisterDatefilter" class="form-control" value=""
+                onchange="cls_cashregister.filter(this.value)">
             </div>
             <div id="container_cashregisterFiltered" class="col-xs-12 pt-2" style="min-height: 100px;">
             </div>
@@ -113,7 +118,7 @@
                         <th scope="col">Salida</th>
                         <th scope="col">Salida Anulada</th>
                       </tr>
-                    </thead> 
+                    </thead>
                     {{-- HACER ESTA TABLA DE LA CAJA MENUDA, UBICAR EL DIV PARA LA LISTA DE ARQUEOS HECHOS EN E DIA --}}
                     <tbody>
                       <tr>
@@ -125,7 +130,7 @@
                     </tbody>
                   </table>
                 </div>
-                <div class="col-xs-12">                
+                <div class="col-xs-12">
                   <table class="table table-bordered">
                     <thead>
                       <tr class="table-success text-center">
@@ -193,10 +198,10 @@
                     </tbody>
                     <tfoot>
                       <tr class="table-success">
-                        <td>Propinas:  <span id="span_totaltip"></span></td>
-                        <td>Descuentos:  <span id="span_totaldiscount"></span></td>
-                        <td>Devoluciones:  <span id="span_totalcashback"></span></td>
-                        <td>Anulaciones:  <span id="span_totalnull"></span></td>
+                        <td>Propinas: <span id="span_totaltip"></span></td>
+                        <td>Descuentos: <span id="span_totaldiscount"></span></td>
+                        <td>Devoluciones: <span id="span_totalcashback"></span></td>
+                        <td>Anulaciones: <span id="span_totalnull"></span></td>
                       </tr>
                       <tr class="table-success">
                         <td></td>
@@ -216,6 +221,7 @@
       </div>
     </div>
   </div>
+
   <!-- Modal -->
   <div class="modal fade  modal-lg" id="inspectCRModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-scrollable">
@@ -293,7 +299,7 @@
                         <tr>
                           <th>Impuesto N.C.</th>
                           <td></td>
-                        </tr>                                                                                                                        
+                        </tr>
                       </tbody>
                     </table>
                   </div>
@@ -394,28 +400,29 @@
         <div id="print_chargeModal_content" class="modal-body">
           <div id="container_form_logincode_reprint">
             <form method="POST" action="" id="form_logincode_reprint">
-                @csrf
-                <div class="form-group row">
-                    <label for="logincode_reprint" class="col-md-4 col-form-label text-md-right">{{ __('Acceso') }}</label>
-                    <div class="col-md-6 mb-3">
-                        <input id="logincode_reprint" type="password" class="form-control" name="logincode_reprint" value="" required autofocus>
-                    </div>
+              @csrf
+              <div class="form-group row">
+                <label for="logincode_reprint" class="col-md-4 col-form-label text-md-right">{{ __('Acceso') }}</label>
+                <div class="col-md-6 mb-3">
+                  <input id="logincode_reprint" type="password" class="form-control" name="logincode_reprint" value=""
+                    required autofocus>
                 </div>
-                <div class="form-group row mb-0">
-                    <div class="col-md-12 text-center">
-                        <button type="submit" id="submit_login_reprint" class="btn tmgreen_bg" style="display: none">
-                            {{ __('Ingresar') }}
-                        </button>
-                    </div>
+              </div>
+              <div class="form-group row mb-0">
+                <div class="col-md-12 text-center">
+                  <button type="submit" id="submit_login_reprint" class="btn tmgreen_bg" style="display: none">
+                    {{ __('Ingresar') }}
+                  </button>
                 </div>
+              </div>
             </form>
           </div>
           <div class="form-group row mb-3">
-              <div class="col-md-12 text-center">
-                  <button type="button" id="btn_toggle_formlogin_reprint" class="btn btn-secondary">
-                      {{ __('Ingreso Manual') }}
-                  </button>
-              </div>
+            <div class="col-md-12 text-center">
+              <button type="button" id="btn_toggle_formlogin_reprint" class="btn btn-secondary">
+                {{ __('Ingreso Manual') }}
+              </button>
+            </div>
           </div>
 
 
@@ -423,24 +430,27 @@
           <form id="container_loginform_reprint" onsubmit="event.preventDefault();" style="display: none">
             <p>Ingrese una contrase&ntilde;a de administrador o supervisor.</p>
             <div class="form-group row">
-                <label for="useremailReprint" class="col-md-4 col-form-label text-md-right">{{ __('Correo E.') }}</label>
-                <div class="col-md-6 mb-3">
-                    <input id="hd_charge" type="hidden" class="form-control" required autocomplete="email" autofocus>
-                    <input id="useremailReprint" type="email" class="form-control" name="useremailReprint" required autocomplete="email" autofocus>
-                </div>
+              <label for="useremailReprint" class="col-md-4 col-form-label text-md-right">{{ __('Correo E.') }}</label>
+              <div class="col-md-6 mb-3">
+                <input id="hd_charge" type="hidden" class="form-control" required autocomplete="email" autofocus>
+                <input id="useremailReprint" type="email" class="form-control" name="useremailReprint" required
+                  autocomplete="email" autofocus>
+              </div>
             </div>
             <div class="form-group row">
-                <label for="userpasswordReprint" class="col-md-4 col-form-label text-md-right">{{ __('Contraseña') }}</label>
-                <div class="col-md-6 mb-3">
-                    <input id="userpasswordReprint" type="password" class="form-control" name="userpasswordReprint" required autocomplete="current-password">
-                </div>
+              <label for="userpasswordReprint"
+                class="col-md-4 col-form-label text-md-right">{{ __('Contraseña') }}</label>
+              <div class="col-md-6 mb-3">
+                <input id="userpasswordReprint" type="password" class="form-control" name="userpasswordReprint" required
+                  autocomplete="current-password">
+              </div>
             </div>
             <div class="form-group row mb-0">
-                <div class="col-md-12 text-center">
-                    <button type="button" id="btn_loginuser_reprint" class="btn tmgreen_bg">
-                        {{ __('Ingresar') }}
-                    </button>
-                </div>
+              <div class="col-md-12 text-center">
+                <button type="button" id="btn_loginuser_reprint" class="btn tmgreen_bg">
+                  {{ __('Ingresar') }}
+                </button>
+              </div>
             </div>
           </form>
         </div>
@@ -462,79 +472,11 @@
 
           <div id="container_form_logincode">
             <form method="POST" action="" id="form_logincode">
-                @csrf
-                <div class="form-group row">
-                    <label for="logincode" class="col-md-4 col-form-label text-md-right">{{ __('Acceso') }}</label>
-                    <div class="col-md-6 mb-3">
-                        <input id="logincode" type="password" class="form-control" name="logincode" value="" required autofocus>
-                    </div>
-                </div>
-                <div class="form-group row mb-0">
-                    <div class="col-md-12 text-center">
-                        <button type="submit" id="submit_login" class="btn tmgreen_bg" style="display: none">
-                            {{ __('Ingresar') }}
-                        </button>
-                    </div>
-                </div>
-            </form>
-          </div>
-          <div class="form-group row mb-3">
-              <div class="col-md-12 text-center">
-                  <button type="button" id="bn_toggle_formlogin" class="btn btn-secondary">
-                      {{ __('Ingreso Manual') }}
-                  </button>
-              </div>
-          </div>
-
-
-
-          <form id="container_loginform" onsubmit="event.preventDefault();" style="display: none">
-
-            <p>Ingrese una contrase&ntilde;a de administrador o supervisor.</p>
-            <div class="form-group row">
-                <label for="useremailCreditnote" class="col-md-4 col-form-label text-md-right">{{ __('Correo E.') }}</label>
-                <div class="col-md-6 mb-3">
-                    <input id="hd_charge_creditnote" type="hidden" class="form-control" required autocomplete="email" autofocus>
-                    <input id="useremailCreditnote" type="email" class="form-control" name="useremailCreditnote" required autocomplete="email" autofocus>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="userpasswordCreditnote" class="col-md-4 col-form-label text-md-right">{{ __('Contraseña') }}</label>
-                <div class="col-md-6 mb-3">
-                    <input id="userpasswordCreditnote" type="password" class="form-control" name="userpasswordCreditnote" required autocomplete="current-password">
-                </div>
-            </div>
-            <div class="form-group row mb-0">
-                <div class="col-md-12 text-center">
-                    <button type="submit" id="btn_loginuser_creditnote" class="btn tmgreen_bg">
-                        {{ __('Ingresar') }}
-                    </button>
-                </div>
-            </div>
-          </form>
-        </div>
-        <div id="" class="modal-footer">
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Modal LOGIN TO CANCEL COMMANDDATA -->
-  <div class="modal fade" id="login_cancelModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="">Ingresar Usuario</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div id="" class="modal-body">
-          <div id="container_form_logincode_nullcommand">
-            <form method="POST" action="" id="form_logincode_nullcommand">
               @csrf
               <div class="form-group row">
-                <label for="logincode_nullcommand" class="col-md-4 col-form-label text-md-right">{{ __('Acceso') }}</label>
+                <label for="logincode" class="col-md-4 col-form-label text-md-right">{{ __('Acceso') }}</label>
                 <div class="col-md-6 mb-3">
-                  <input id="logincode_nullcommand" type="password" class="form-control" name="logincode_nullcommand" value="" required autofocus>
+                  <input id="logincode" type="password" class="form-control" name="logincode" value="" required autofocus>
                 </div>
               </div>
               <div class="form-group row mb-0">
@@ -548,38 +490,112 @@
           </div>
           <div class="form-group row mb-3">
             <div class="col-md-12 text-center">
-              <button type="button" id="btn_toggle_formlogin_nullcommand" class="btn btn-secondary">
+              <button type="button" id="bn_toggle_formlogin" class="btn btn-secondary">
                 {{ __('Ingreso Manual') }}
               </button>
             </div>
           </div>
-          <form id="container_loginform_nullcommand" onsubmit="event.preventDefault();" style="display: none">
+
+
+
+          <form id="container_loginform" onsubmit="event.preventDefault();" style="display: none">
+
             <p>Ingrese una contrase&ntilde;a de administrador o supervisor.</p>
             <div class="form-group row">
-                <label for="useremailCancel" class="col-md-4 col-form-label text-md-right">{{ __('Correo E.') }}</label>
-                <div class="col-md-6 mb-3">
-                    <input id="hd_command_cancel" type="hidden" class="form-control" required autocomplete="email" autofocus>
-                    <input id="useremailCancel" type="email" class="form-control" name="useremailCancel" required autocomplete="email" autofocus>
-                </div>
+              <label for="useremailCreditnote" class="col-md-4 col-form-label text-md-right">{{ __('Correo E.') }}</label>
+              <div class="col-md-6 mb-3">
+                <input id="hd_charge_creditnote" type="hidden" class="form-control" required autocomplete="email"
+                  autofocus>
+                <input id="useremailCreditnote" type="email" class="form-control" name="useremailCreditnote" required
+                  autocomplete="email" autofocus>
+              </div>
             </div>
             <div class="form-group row">
-                <label for="userpasswordCancel" class="col-md-4 col-form-label text-md-right">{{ __('Contraseña') }}</label>
-                <div class="col-md-6 mb-3">
-                    <input id="userpasswordCancel" type="password" class="form-control" name="userpasswordCancel" required autocomplete="current-password">
-                </div>
+              <label for="userpasswordCreditnote"
+                class="col-md-4 col-form-label text-md-right">{{ __('Contraseña') }}</label>
+              <div class="col-md-6 mb-3">
+                <input id="userpasswordCreditnote" type="password" class="form-control" name="userpasswordCreditnote"
+                  required autocomplete="current-password">
+              </div>
             </div>
             <div class="form-group row mb-0">
-                <div class="col-md-12 text-center">
-                    <button type="button" id="btn_loginuser_cancel" class="btn tmgreen_bg">
-                        {{ __('Ingresar') }}
-                    </button>
-                </div>
+              <div class="col-md-12 text-center">
+                <button type="submit" id="btn_loginuser_creditnote" class="btn tmgreen_bg">
+                  {{ __('Ingresar') }}
+                </button>
+              </div>
             </div>
           </form>
         </div>
         <div id="" class="modal-footer">
         </div>
       </div>
+    </div>
+  </div>
+
+  <input id="hd_charge_creditnote" type="hidden" class="form-control" required autocomplete="email" autofocus>
+  <input id="useremailCreditnote" type="email" class="form-control" name="useremailCreditnote" required
+    autocomplete="email" autofocus>
+
+  <div class="modal-content">
+    <div class="modal-header">
+      <h1 class="modal-title fs-5" id="">Ingresar Usuario</h1>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div id="" class="modal-body">
+      <div id="container_form_logincode_nullcommand">
+        <form method="POST" action="" id="form_logincode_nullcommand">
+          @csrf
+          <div class="form-group row">
+            <label for="logincode_nullcommand" class="col-md-4 col-form-label text-md-right">{{ __('Acceso') }}</label>
+            <div class="col-md-6 mb-3">
+              <input id="logincode_nullcommand" type="password" class="form-control" name="logincode_nullcommand" value=""
+                required autofocus>
+            </div>
+          </div>
+          <div class="form-group row mb-0">
+            <div class="col-md-12 text-center">
+              <button type="submit" id="submit_login" class="btn tmgreen_bg" style="display: none">
+                {{ __('Ingresar') }}
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="form-group row mb-3">
+        <div class="col-md-12 text-center">
+          <button type="button" id="btn_toggle_formlogin_nullcommand" class="btn btn-secondary">
+            {{ __('Ingreso Manual') }}
+          </button>
+        </div>
+      </div>
+      <form id="container_loginform_nullcommand" onsubmit="event.preventDefault();" style="display: none">
+        <p>Ingrese una contrase&ntilde;a de administrador o supervisor.</p>
+        <div class="form-group row">
+          <label for="useremailCancel" class="col-md-4 col-form-label text-md-right">{{ __('Correo E.') }}</label>
+          <div class="col-md-6 mb-3">
+            <input id="hd_command_cancel" type="hidden" class="form-control" required autocomplete="email" autofocus>
+            <input id="useremailCancel" type="email" class="form-control" name="useremailCancel" required
+              autocomplete="email" autofocus>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="userpasswordCancel" class="col-md-4 col-form-label text-md-right">{{ __('Contraseña') }}</label>
+          <div class="col-md-6 mb-3">
+            <input id="userpasswordCancel" type="password" class="form-control" name="userpasswordCancel" required
+              autocomplete="current-password">
+          </div>
+        </div>
+        <div class="form-group row mb-0">
+          <div class="col-md-12 text-center">
+            <button type="button" id="btn_loginuser_cancel" class="btn tmgreen_bg">
+              {{ __('Ingresar') }}
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div id="" class="modal-footer">
     </div>
   </div>
 
@@ -595,10 +611,15 @@
           <div class="row">
             <div class="col-sm-12">
               <div class="input-group" style="height: 10vh">
-                <input type="text" id="articlethumbnailFilter" class="form-control" placeholder="Buscar artículo por código o descripción" onkeyup="cls_command.filter_articlethumbnail(this.value)">
-                <button class="btn btn-outline-secondary" type="button" onclick="cls_command.filter_article(document.getElementById('articlethumbnailFilter').value)">
+                <input type="text" id="articlethumbnailFilter" class="form-control"
+                  placeholder="Buscar artículo por código o descripción"
+                  onkeyup="cls_command.filter_articlethumbnail(this.value)">
+                <button class="btn btn-outline-secondary" type="button"
+                  onclick="cls_command.filter_article(document.getElementById('articlethumbnailFilter').value)">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"></path>
+                    <path
+                      d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z">
+                    </path>
                   </svg>
                 </button>
               </div>
@@ -667,33 +688,33 @@
     </div>
   </div>
 
-	<div id="container_request" class="row"></div>
+  <div id="container_request" class="row"></div>
 
 @endsection
 
 @section('javascript')
-	<script src="{{ asset('attached/js/charge.js') }}"></script>
-	<script src="{{ asset('attached/js/sweetalert.js') }}"></script>
-	<script src="{{ asset('attached/js/jquery-ui.min_edit.js') }}"></script>
-	
-	<script type="text/javascript">
-		var open_request = JSON.parse('<?php echo json_encode($data['open_request']) ?>');
-		var closed_request = JSON.parse('<?php echo json_encode($data['closed_request']) ?>');
-    const cls_request = new class_request(open_request,closed_request);
+  <script src="{{ asset('attached/js/charge.js') }}"></script>
+  <script src="{{ asset('attached/js/sweetalert.js') }}"></script>
+  <script src="{{ asset('attached/js/jquery-ui.min_edit.js') }}"></script>
 
-		var canceled_request = JSON.parse('<?php echo json_encode($data['canceled_request']) ?>');
-		var api_url = <?php echo json_encode($data['api_url']); ?>;
-    const cls_charge = new class_charge(canceled_request,api_url);
+  <script type="text/javascript">
+    var open_request = JSON.parse('<?php echo json_encode($data['open_request']) ?>');
+    var closed_request = JSON.parse('<?php echo json_encode($data['closed_request']) ?>');
+    const cls_request = new class_request(open_request, closed_request);
+
+    var canceled_request = JSON.parse('<?php echo json_encode($data['canceled_request']) ?>');
+    var api_url = <?php echo json_encode($data['api_url']); ?>;
+    const cls_charge = new class_charge(canceled_request, api_url);
 
     // const cls_command = new class_command;
-		var cls_command = new class_command;
+    var cls_command = new class_command;
 
-		var paymentmethod = JSON.parse('<?php echo json_encode($data['paymentmethod']) ?>');
-		const cls_paymentmethod = new class_paymentmethod(paymentmethod);
+    var paymentmethod = JSON.parse('<?php echo json_encode($data['paymentmethod']) ?>');
+    const cls_paymentmethod = new class_paymentmethod(paymentmethod);
 
-		const cls_payment = new class_payment;
+    const cls_payment = new class_payment;
 
-		var creditnote = JSON.parse('<?php echo json_encode($data['creditnote_list']) ?>');
+    var creditnote = JSON.parse('<?php echo json_encode($data['creditnote_list']) ?>');
     const cls_creditnote = new class_creditnote(creditnote.active, creditnote.inactive);
 
     const cls_cashoutput = new class_cashoutput;
@@ -704,21 +725,21 @@
     const cls_commanddata = new class_commanddata;
 
     var client_list = JSON.parse('<?php echo json_encode($data['client_list']) ?>');
-		const cls_client = new class_client(client_list);
+    const cls_client = new class_client(client_list);
 
     var raw_article = JSON.parse('<?php echo json_encode($data['article_list']) ?>');
-		var cls_article = new class_article(raw_article);
+    var cls_article = new class_article(raw_article);
 
     var raw_table = JSON.parse('<?php echo json_encode($data['table_list']) ?>');
-		var cls_table = new class_table(raw_table);
+    var cls_table = new class_table(raw_table);
 
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       cls_charge.index();
 
-              var btn = document.getElementById('btn_feleft');
-        if (btn) {
-          btn.click();
-        }
+      var btn = document.getElementById('btn_feleft');
+      if (btn) {
+        btn.click();
+      }
 
       setInterval(() => {
         var btn = document.getElementById('btn_reloadrequest');
@@ -728,22 +749,22 @@
         var btn = document.getElementById('btn_filterClosedRequest');
         if (btn) {
           btn.click();
-        }        
+        }
       }, 60000);
-      cls_charge.api_login();
-		});
+      //cls_charge.api_login();
+    });
     var fecha = cls_general.getDate()
-    document.getElementById('cashoutputDatefilter').value = cls_general.date_converter('ymd','dmy', fecha[0]);
-    document.getElementById('cashoutputDateshow').innerHTML = cls_general.date_converter('ymd','dmy', fecha[0]);
-    document.getElementById('btn_saveCashregister').addEventListener('click',() => { cls_cashregister.save(); });
-    document.getElementById('btn_loginuser_reprint').addEventListener('click',() => { cls_charge.checklogin_reprint(); });
-    document.getElementById('btn_loginuser_creditnote').addEventListener('click',() => { cls_charge.checklogin_creditnote(); });
-    document.getElementById('btn_loginuser_cancel').addEventListener('click',() => { cls_command.checklogin_cancel(); });
+    document.getElementById('cashoutputDatefilter').value = cls_general.date_converter('ymd', 'dmy', fecha[0]);
+    document.getElementById('cashoutputDateshow').innerHTML = cls_general.date_converter('ymd', 'dmy', fecha[0]);
+    document.getElementById('btn_saveCashregister').addEventListener('click', () => { cls_cashregister.save(); });
+    document.getElementById('btn_loginuser_reprint').addEventListener('click', () => { cls_charge.checklogin_reprint(); });
+    document.getElementById('btn_loginuser_creditnote').addEventListener('click', () => { cls_charge.checklogin_creditnote(); });
+    document.getElementById('btn_loginuser_cancel').addEventListener('click', () => { cls_command.checklogin_cancel(); });
 
     // ###### LOGIN PARA NOTAS DE CREDITO
     document.getElementById('form_logincode').addEventListener("submit", (e) => {
       e.preventDefault();
-      var url = '/logincode/'+document.getElementById('logincode').value;
+      var url = '/logincode/' + document.getElementById('logincode').value;
       var method = 'GET';
       var body = '';
       var funcion = function (obj) {
@@ -770,7 +791,7 @@
     // ##### LOGIN PARA ANULAR COMANDAS DESDE CAJA
     document.getElementById('form_logincode_nullcommand').addEventListener("submit", (e) => {
       e.preventDefault();
-      var url = '/logincode/'+document.getElementById('logincode_nullcommand').value;
+      var url = '/logincode/' + document.getElementById('logincode_nullcommand').value;
       var method = 'GET';
       var body = '';
       var funcion = function (obj) {
@@ -798,7 +819,7 @@
     // ##### LOGIN PARA REIMPRIMIR FACTURAS DESDE CAJA
     document.getElementById('form_logincode_reprint').addEventListener("submit", (e) => {
       e.preventDefault();
-      var url = '/logincode/'+document.getElementById('logincode_reprint').value;
+      var url = '/logincode/' + document.getElementById('logincode_reprint').value;
       var method = 'GET';
       var body = '';
       var funcion = function (obj) {
@@ -823,12 +844,12 @@
       }
     });
 
-	</script>
-	{{-- ##############    JQUERY   ############### --}}
-	<script type="text/javascript">
-    $( function() {
-      $( "#cashregisterDatefilter" ).datepicker();
-      $( "#cashoutputDatefilter" ).datepicker();
-    } );
-	</script>
+  </script>
+  {{-- ############## JQUERY ############### --}}
+  <script type="text/javascript">
+    $(function () {
+      $("#cashregisterDatefilter").datepicker();
+      $("#cashoutputDatefilter").datepicker();
+    });
+  </script>
 @endsection
