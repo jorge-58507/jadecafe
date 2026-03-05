@@ -97,47 +97,51 @@ class productwarehouseController extends Controller
         return $tm_productwarehouse->ai_productwarehouse_id;
     }
 
-    public function show($id){
-        $qry = tm_productwarehouse::select('tm_productwarehouses.ai_productwarehouse_id','tm_productwarehouses.tx_productwarehouse_description','tm_productwarehouses.tx_productwarehouse_quantity','tm_productwarehouses.tx_productwarehouse_minimun','tm_productwarehouses.tx_productwarehouse_maximun','tm_products.tx_product_code','tm_warehouses.tx_warehouse_value')->join('tm_warehouses','tm_warehouses.ai_warehouse_id','tm_productwarehouses.productwarehouse_ai_warehouse_id')->join('tm_products','tm_products.ai_product_id', 'tm_productwarehouses.productwarehouse_ai_product_id')->orderby('productwarehouse_ai_warehouse_id')->orderby('tx_productwarehouse_description')->where('tm_productwarehouses.ai_productwarehouse_id',$id);
+    public function show($id)
+    {
+        $qry = tm_productwarehouse::select('tm_productwarehouses.ai_productwarehouse_id', 'tm_productwarehouses.tx_productwarehouse_description', 'tm_productwarehouses.tx_productwarehouse_quantity', 'tm_productwarehouses.tx_productwarehouse_minimun', 'tm_productwarehouses.tx_productwarehouse_maximun', 'tm_products.tx_product_code', 'tm_warehouses.tx_warehouse_value')->join('tm_warehouses', 'tm_warehouses.ai_warehouse_id', 'tm_productwarehouses.productwarehouse_ai_warehouse_id')->join('tm_products', 'tm_products.ai_product_id', 'tm_productwarehouses.productwarehouse_ai_product_id')->orderby('productwarehouse_ai_warehouse_id')->orderby('tx_productwarehouse_description')->where('tm_productwarehouses.ai_productwarehouse_id', $id);
         if ($qry->count() === 0) {
-            return response()->json(['status'=>'failed','message'=>'Producto no existe.'],400);
+            return response()->json(['status' => 'failed', 'message' => 'Producto no existe.'], 400);
         }
         $rs = $qry->first();
 
-        $rs_transfer = tm_warehousetransfer::select('tm_warehouses.tx_warehouse_value','tm_warehousetransfers.tx_warehousetransfer_quantity','tm_warehousetransfers.created_at')
-        ->join('tm_warehouses','tm_warehouses.ai_warehouse_id','tm_warehousetransfers.tx_warehousetransfer_origin')
-        ->where('warehousetransfer_ai_productwarehouse_id',$rs['ai_productwarehouse_id'])->limit(20)->get();
+        $rs_transfer = tm_warehousetransfer::select('tm_warehouses.tx_warehouse_value', 'tm_warehousetransfers.tx_warehousetransfer_quantity', 'tm_warehousetransfers.created_at')
+            ->join('tm_warehouses', 'tm_warehouses.ai_warehouse_id', 'tm_warehousetransfers.tx_warehousetransfer_origin')
+            ->where('warehousetransfer_ai_productwarehouse_id', $rs['ai_productwarehouse_id'])->limit(20)->get();
 
-        return response()->json(['status'=>'success','message'=>'', 'data' => ['info' => $rs, 'transfer_list' => $rs_transfer]]);
+        return response()->json(['status' => 'success', 'message' => '', 'data' => ['info' => $rs, 'transfer_list' => $rs_transfer]]);
     }
 
-    public function show_quantity($id){
-        $rs = tm_productcount::where('productcount_ai_product_id',$id)->limit(10)->get();
-        return response()->json(['status'=>'success','message'=>'','data'=>['count_list'=>$rs]]);
+    public function show_quantity($id)
+    {
+        $rs = tm_productcount::where('productcount_ai_product_id', $id)->limit(10)->get();
+        return response()->json(['status' => 'success', 'message' => '', 'data' => ['count_list' => $rs]]);
     }
 
-    public function update(Request $request){
-        $qry = tm_productwarehouse::where('ai_productwarehouse_id',$request->input('a'));
+    public function update(Request $request)
+    {
+        $qry = tm_productwarehouse::where('ai_productwarehouse_id', $request->input('a'));
         if ($qry->count() === 0) {
-            return response()->json(['status'=>'failed','message'=>'Producto no existe.'],400);
+            return response()->json(['status' => 'failed', 'message' => 'Producto no existe.'], 400);
         }
         if (empty($request->input('a')) || empty($request->input('c')) || empty($request->input('d'))) {
-            return response()->json(['status'=>'failed','message'=>'Falta información.'],400);
+            return response()->json(['status' => 'failed', 'message' => 'Falta información.'], 400);
         }
         $qry->update(['tx_productwarehouse_minimun' => $request->input('c'), 'tx_productwarehouse_maximun' => $request->input('d')]);
 
-        $rs_productwarehouse = tm_productwarehouse::select('tm_productwarehouses.ai_productwarehouse_id','tm_productwarehouses.tx_productwarehouse_description','tm_productwarehouses.tx_productwarehouse_quantity','tm_productwarehouses.tx_productwarehouse_minimun','tm_productwarehouses.tx_productwarehouse_maximun','tm_products.tx_product_code','tm_warehouses.tx_warehouse_value')->join('tm_warehouses','tm_warehouses.ai_warehouse_id','tm_productwarehouses.productwarehouse_ai_warehouse_id')->join('tm_products','tm_products.ai_product_id', 'tm_productwarehouses.productwarehouse_ai_product_id')->orderby('productwarehouse_ai_warehouse_id')->orderby('tx_productwarehouse_description')->get();
-        return response()->json(['status'=>'success','message'=>'Producto Actualizado.', 'data' => ['all' => $rs_productwarehouse]]);
+        $rs_productwarehouse = tm_productwarehouse::select('tm_productwarehouses.ai_productwarehouse_id', 'tm_productwarehouses.tx_productwarehouse_description', 'tm_productwarehouses.tx_productwarehouse_quantity', 'tm_productwarehouses.tx_productwarehouse_minimun', 'tm_productwarehouses.tx_productwarehouse_maximun', 'tm_products.tx_product_code', 'tm_warehouses.tx_warehouse_value')->join('tm_warehouses', 'tm_warehouses.ai_warehouse_id', 'tm_productwarehouses.productwarehouse_ai_warehouse_id')->join('tm_products', 'tm_products.ai_product_id', 'tm_productwarehouses.productwarehouse_ai_product_id')->orderby('productwarehouse_ai_warehouse_id')->orderby('tx_productwarehouse_description')->get();
+        return response()->json(['status' => 'success', 'message' => 'Producto Actualizado.', 'data' => ['all' => $rs_productwarehouse]]);
 
     }
 
-    public function update_quantity(Request $request, $id){
-        $qry = tm_productwarehouse::where('ai_productwarehouse_id',$id);
+    public function update_quantity(Request $request, $id)
+    {
+        $qry = tm_productwarehouse::where('ai_productwarehouse_id', $id);
         if ($qry->count() === 0) {
-            return response()->json(['status'=>'failed','message'=>'Producto no existe.'],400);
+            return response()->json(['status' => 'failed', 'message' => 'Producto no existe.'], 400);
         }
         $rs_product = $qry->first();
-        $qry->update(['tx_productwarehouse_quantity'=>$request->input('a')]);
+        $qry->update(['tx_productwarehouse_quantity' => $request->input('a')]);
 
         $model = new tm_productcount;
         $user = $request->user();
@@ -147,50 +151,52 @@ class productwarehouseController extends Controller
         $model->tx_productcount_after = $request->input('a');
         $model->save();
 
-        $rs_product = tm_productwarehouse::where('ai_productwarehouse_id',$id)->first();
-        return response()->json(['status'=>'success','message'=>'Conteo Actualizado.','data'=>['info'=>$rs_product]]);
+        $rs_product = tm_productwarehouse::where('ai_productwarehouse_id', $id)->first();
+        return response()->json(['status' => 'success', 'message' => 'Conteo Actualizado.', 'data' => ['info' => $rs_product]]);
 
     }
 
-    public function delete($id){
-        $qry = tm_productwarehouse::where('ai_productwarehouse_id',$id);
+    public function delete($id)
+    {
+        $qry = tm_productwarehouse::where('ai_productwarehouse_id', $id);
         if ($qry->count() === 0) {
-            return response()->json(['status'=>'failed','message'=>'Producto no existe.'],400);
+            return response()->json(['status' => 'failed', 'message' => 'Producto no existe.'], 400);
         }
         $qry->delete();
 
-        $rs_productwarehouse = tm_productwarehouse::select('tm_productwarehouses.ai_productwarehouse_id','tm_productwarehouses.tx_productwarehouse_description','tm_productwarehouses.tx_productwarehouse_quantity','tm_productwarehouses.tx_productwarehouse_minimun','tm_productwarehouses.tx_productwarehouse_maximun','tm_products.tx_product_code','tm_warehouses.tx_warehouse_value')->join('tm_warehouses','tm_warehouses.ai_warehouse_id','tm_productwarehouses.productwarehouse_ai_warehouse_id')->join('tm_products','tm_products.ai_product_id', 'tm_productwarehouses.productwarehouse_ai_product_id')->orderby('productwarehouse_ai_warehouse_id')->orderby('tx_productwarehouse_description')->get();
-        return response()->json(['status'=>'success','message'=>'Producto eliminado.', 'data' => ['all' => $rs_productwarehouse]]);
+        $rs_productwarehouse = tm_productwarehouse::select('tm_productwarehouses.ai_productwarehouse_id', 'tm_productwarehouses.tx_productwarehouse_description', 'tm_productwarehouses.tx_productwarehouse_quantity', 'tm_productwarehouses.tx_productwarehouse_minimun', 'tm_productwarehouses.tx_productwarehouse_maximun', 'tm_products.tx_product_code', 'tm_warehouses.tx_warehouse_value')->join('tm_warehouses', 'tm_warehouses.ai_warehouse_id', 'tm_productwarehouses.productwarehouse_ai_warehouse_id')->join('tm_products', 'tm_products.ai_product_id', 'tm_productwarehouses.productwarehouse_ai_product_id')->orderby('productwarehouse_ai_warehouse_id')->orderby('tx_productwarehouse_description')->get();
+        return response()->json(['status' => 'success', 'message' => 'Producto eliminado.', 'data' => ['all' => $rs_productwarehouse]]);
     }
 
-    public function show_productcode($str,$warehouse_id){
+    public function show_productcode($str, $warehouse_id)
+    {
         $productcodeController = new productcodeController;
         $rs_productcode = $productcodeController->show_productcode($str);
 
         // SI NO EXISTE EL CODIGO EN PRODUCTCODE
         if (empty($rs_productcode)) {
-            return response()->json(['status'=>'confirm_productcode','message'=>'No existe el código.', 'data' => ['warehouse_id' => $warehouse_id]]);
+            return response()->json(['status' => 'confirm_productcode', 'message' => 'No existe el código.', 'data' => ['warehouse_id' => $warehouse_id]]);
         }
 
         // CHECK SI NO EXISTE EN WAREHOUSE
-        $qry = tm_productwarehouse::where('productwarehouse_ai_product_id',$rs_productcode['product_id'])->where('productwarehouse_ai_warehouse_id',$warehouse_id);
+        $qry = tm_productwarehouse::where('productwarehouse_ai_product_id', $rs_productcode['product_id'])->where('productwarehouse_ai_warehouse_id', $warehouse_id);
         if ($qry->count() === 0) {
             $user = auth()->user();
 
             $tm_productwarehouse = new tm_productwarehouse;
-            $tm_productwarehouse->productwarehouse_ai_user_id       = $user->id;
-            $tm_productwarehouse->productwarehouse_ai_product_id    = $rs_productcode['product_id'];
-            $tm_productwarehouse->productwarehouse_ai_warehouse_id  = $warehouse_id;
-            $tm_productwarehouse->tx_productwarehouse_description   = $rs_productcode['description'];
-            $tm_productwarehouse->tx_productwarehouse_quantity      = 0;
-            $tm_productwarehouse->tx_productwarehouse_minimun       = 0;
-            $tm_productwarehouse->tx_productwarehouse_maximun       = 10000;
+            $tm_productwarehouse->productwarehouse_ai_user_id = $user->id;
+            $tm_productwarehouse->productwarehouse_ai_product_id = $rs_productcode['product_id'];
+            $tm_productwarehouse->productwarehouse_ai_warehouse_id = $warehouse_id;
+            $tm_productwarehouse->tx_productwarehouse_description = $rs_productcode['description'];
+            $tm_productwarehouse->tx_productwarehouse_quantity = 0;
+            $tm_productwarehouse->tx_productwarehouse_minimun = 0;
+            $tm_productwarehouse->tx_productwarehouse_maximun = 10000;
             $tm_productwarehouse->save();
         }
 
 
 
-        return response()->json(['status'=>'success','message'=>'', 'data' => ['productcode' => $rs_productcode]]);
+        return response()->json(['status' => 'success', 'message' => '', 'data' => ['productcode' => $rs_productcode]]);
     }
 
 }

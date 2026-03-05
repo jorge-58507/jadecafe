@@ -13,17 +13,20 @@
 use App\User;
 
 Route::get('/', function () {
-    $rs_user = User::select('users.name','users.email','roles.name as rol')
-    ->join('role_users','users.id','=', 'role_users.user_id')
-    ->join('roles','roles.id','=', 'role_users.role_id')
-    ->wherein('roles.name',['bartender','cashier'])->where('users.status',1)->get();
-    $data = ['user_list'=>$rs_user];
+    $rs_user = User::select('users.name', 'users.email', 'roles.name as rol')
+        ->join('role_users', 'users.id', '=', 'role_users.user_id')
+        ->join('roles', 'roles.id', '=', 'role_users.role_id')
+        ->wherein('roles.name', ['bartender', 'cashier'])->where('users.status', 1)->get();
+    $data = ['user_list' => $rs_user];
     return view('welcome', compact('data'));
 })->name('welcome');
 Route::get('/request', function () {
     return view('request.index');
 })->name('request')->middleware('auth');
 Route::get('/report', function () {
+    if (auth()->user()->hasAnyRole(['admin', 'super']) != true) {
+        return redirect()->route('request.index');
+    }
     return view('report.index');
 })->middleware('auth');
 
@@ -80,6 +83,9 @@ Route::post('/commanddatalastrequest/', 'commanddataController@add_tolastrequest
 Route::post('/acregister/filter', 'acregisterController@filter');
 Route::post('/productwarehouse/add_product', 'productwarehouseController@add_product');
 Route::post('productwarehouse/{param}/count', 'productwarehouseController@update_quantity')->middleware('auth');
+Route::post('/request/split', 'requestController@save_split');
+Route::post('request/calculate', 'chargeController@calculateSaleApi')->middleware('auth');
+Route::post('send_nofe/', 'chargeController@send_nofe')->middleware('auth');
 
 Route::delete('product/{param}/measure', 'measureproductController@delete')->middleware('auth');
 Route::delete('purchase/{param}/return', 'productinputController@return')->middleware('auth');
@@ -106,7 +112,7 @@ Route::put('productwarehouse/{param}', 'productwarehouseController@update')->mid
 
 
 Route::resource('ubication', 'ubicationController')->middleware('auth');
-Route::resource('table',   'tableController')->middleware('auth');
+Route::resource('table', 'tableController')->middleware('auth');
 Route::resource('product', 'productController')->middleware('auth');
 Route::resource('article', 'articleController')->middleware('auth');
 Route::resource('price', 'priceController')->middleware('auth');

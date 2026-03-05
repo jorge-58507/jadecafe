@@ -403,10 +403,10 @@ class class_request {
           "Hubieron problemas para conectarse al servidor, reintentando en 10 seg.",
           { bg: "text-bg-secondary" },
         );
-        cls_charge.api_login();
-        setTimeout(() => {
-          cls_request.get_onlinependant();
-        }, 5000);
+        // cls_charge.api_login();
+        // setTimeout(() => {
+        //   cls_request.get_onlinependant();
+        // }, 5000);
       }
     };
     var api_token = cls_charge.api_token;
@@ -447,10 +447,10 @@ class class_request {
           "Hubieron problemas para conectarse al servidor, reintentando en 10 seg.",
           { bg: "text-bg-secondary" },
         );
-        cls_charge.api_login();
-        setTimeout(() => {
-          cls_request.get_onlinependant();
-        }, 5000);
+        // cls_charge.api_login();
+        // setTimeout(() => {
+        //   cls_request.get_onlinependant();
+        // }, 5000);
       }
     };
     var api_token = cls_charge.api_token;
@@ -494,10 +494,10 @@ class class_request {
           "Hubieron problemas para conectarse al servidor, reintentando en 10 seg.",
           { bg: "text-bg-secondary" },
         );
-        cls_charge.api_login();
-        setTimeout(() => {
-          cls_request.show_online();
-        }, 5000);
+        // cls_charge.api_login();
+        // setTimeout(() => {
+        //   cls_request.show_online();
+        // }, 5000);
       }
     };
     var api_token = cls_charge.api_token;
@@ -710,10 +710,10 @@ class class_request {
             "Hubieron problemas para conectarse al servidor, reintentando en 10 seg.",
             { bg: "text-bg-secondary" },
           );
-          cls_charge.api_login();
-          setTimeout(() => {
-            cls_request.show_online();
-          }, 5000);
+          // cls_charge.api_login();
+          // setTimeout(() => {
+          //   cls_request.show_online();
+          // }, 5000);
         }
       }
     };
@@ -1001,9 +1001,9 @@ class class_charge {
         return date;
       }
     });
-    setInterval(() => {
-      cls_request.get_onlinependant();
-    }, 30000);
+    // setInterval(() => {
+    //   cls_request.get_onlinependant();
+    // }, 30000);
   }
   show(request_slug) {
     document.getElementById("giftcardModal_content").innerHTML = "";
@@ -1489,6 +1489,23 @@ class class_charge {
     };
     cls_general.async_laravel_request(url, method, funcion, body);
   }
+  charge_nofe(charge_slug) {
+    document.getElementsByClassName("btn_nofe").disabled = true;
+    setTimeout(() => {
+      document.getElementsByClassName("btn_nofe").disabled = false;
+    }, 5000);
+    var url = "/send_nofe/";
+    var method = "POST";
+    var body = JSON.stringify({ a: charge_slug });
+    var funcion = function (obj) {
+      if (obj.status === "success") {
+        cls_general.shot_toast_bs(obj.message, { bg: "text-bg-success" });
+      } else {
+        cls_general.shot_toast_bs(obj.message, { bg: "text-bg-warning" });
+      }
+    };
+    cls_general.async_laravel_request(url, method, funcion, body);
+  }
 
   loginuser_reprint(charge_slug) {
     document.getElementById("hd_charge").value = charge_slug;
@@ -1609,7 +1626,6 @@ class class_charge {
     var funcion = function (obj) {
       if (obj.status === "success") {
         var obj_data = obj.data;
-        cls_charge.fe_left = obj_data.foliosDisponibleCiclo;
         document.getElementById("folioLeft").value =
           obj_data.foliosDisponibleCiclo + "/" + obj_data.foliosTotalesCiclo;
       } else {
@@ -1618,7 +1634,6 @@ class class_charge {
     };
     cls_general.async_laravel_request(url, method, funcion, body);
   }
-
   async api_login() {
     var url = cls_charge.api_url + "APIlogin";
     var method = "POST";
@@ -1626,6 +1641,7 @@ class class_charge {
       email: "apirequest@mail.com",
       password: "requestable7812",
     });
+    // var body = JSON.stringify({ email: 'requestapi@mail.com', password: 'requestable7812' });
     var funcion = function (obj) {
       if (obj.data.status === "success") {
         cls_charge.api_token = obj.data.token;
@@ -1848,7 +1864,7 @@ class class_command {
           var url = "/request/" + request_slug;
           var method = "GET";
           var body = "";
-          var funcion = function (obj) {
+          var funcion = async function (obj) {
             if (obj.data.command_procesed.length === 0) {
               cls_general.shot_toast_bs("El pedido ya fue cerrado.", {
                 bg: "text-bg-warning",
@@ -2103,11 +2119,7 @@ class class_command {
           <label for="ingredient_${i}">${i + 1}.- Ingrediente</label>
           <select class="form-select" name="show" id="ingredient_${i}" alt="${raw_ingredient[0].to_go}">`;
         raw_ingredient.map((ingredient) => {
-          var warehouse =
-            cls_general.is_empty_var(ingredient.warehouse) === 0
-              ? 2
-              : ingredient.warehouse;
-          content_recipe += `<option value="${ingredient.quantity},${ingredient.measure_id},${ingredient.product_id},${warehouse}">${ingredient.quantity} (${ingredient.measure_value}) ${ingredient.product_value}</option>`;
+          content_recipe += `<option value="${ingredient.quantity},${ingredient.measure_id},${ingredient.product_id}">${ingredient.quantity} (${ingredient.measure_value}) ${ingredient.product_value}</option>`;
         });
         content_recipe += `</select></div>`;
       } else {
@@ -2116,7 +2128,7 @@ class class_command {
             <label for="ingredient_${i}">${i + 1}.- Ingrediente</label>
             <select class="form-select" name="noshow" id="ingredient_${i}" alt="${raw_ingredient[0].to_go}">`;
         raw_ingredient.map((ingredient) => {
-          content_recipe += `<option value="${ingredient.quantity},${ingredient.measure_id},${ingredient.product_id},${ingredient.warehouse}">${ingredient.quantity} (${ingredient.measure_value}) ${ingredient.product_value}</option>`;
+          content_recipe += `<option value="${ingredient.quantity},${ingredient.measure_id},${ingredient.product_id}">${ingredient.quantity} (${ingredient.measure_value}) ${ingredient.product_value}</option>`;
         });
         content_recipe += `</select></div>`;
       }
@@ -2261,6 +2273,7 @@ class class_command {
     document.getElementById("span_commandTotal").innerHTML =
       "<h5>Total: B/ " + content.price_sale.total + "</h5>";
   }
+
   generate_articleselected(command_list) {
     var content = '<div class="accordion" id="">';
     var raw_price = [];
@@ -2576,30 +2589,11 @@ class class_command {
     };
     cls_general.async_laravel_request(url, method, funcion, body);
   }
-  // set_client(slug, name, exent) {
-  //   document.getElementById('requestClient').setAttribute('alt', exent);
-  //   document.getElementById('requestClient').setAttribute('name', slug);
-  //   document.getElementById('requestClient').value = name;
-
-  //   const Modal = bootstrap.Modal.getInstance('#clientModal');
-  //   if (Modal != null) {
-  //     Modal.hide();
-  //   }
-
-  // }
-  set_client(slug, name, exent, birthday = "") {
-    console.log("llamando");
+  set_client(slug, name, exent) {
     document.getElementById("requestClient").setAttribute("alt", exent);
     document.getElementById("requestClient").setAttribute("name", slug);
     document.getElementById("requestClient").value = name;
-    var today = cls_general.getDate();
-    var raw_birthday = birthday.split("-");
-    var split_birthday = raw_birthday[2] + "/" + raw_birthday[1];
-    var raw_today = today[0].split("-");
-    var split_today = raw_today[2] + "/" + raw_today[1];
-    if (birthday != "1970-01-01" && split_birthday === split_today) {
-      swal("El cliente seleccionado cumpleaños hoy.");
-    }
+
     const Modal = bootstrap.Modal.getInstance("#clientModal");
     if (Modal != null) {
       Modal.hide();
@@ -2746,7 +2740,7 @@ class class_command {
   }
 
   // API
-  create_request(raw_data) {
+  async create_request(raw_data) {
     var onlinerequest_info = raw_data.request_api;
     var onlinerequest_slug = onlinerequest_info.tx_request_slug;
 
@@ -3432,7 +3426,7 @@ class class_payment {
     });
     var total = cls_general.val_dec(cls_charge.charge_request.total, 2, 1, 1);
     total = parseFloat(total);
-    if (total < received) {
+    if (total <= received) {
       cls_general.shot_toast_bs("Ya se complet&oacute; el pago.", {
         bg: "text-bg-warning",
       });
@@ -3585,7 +3579,7 @@ class class_payment {
     cls_payment.render();
   }
   process(btn, request_slug) {
-    cls_general.disable_submit(btn, 0);
+    cls_general.disable_submit(btn);
     var raw_payment = cls_payment.payment;
     let received = 0;
     raw_payment.map((payment) => {
@@ -3608,7 +3602,6 @@ class class_payment {
       b: raw_payment,
       c: cls_payment.giftcard,
       d: cls_charge.tip,
-      e: cls_charge.fe_left,
     });
     var funcion = function (obj) {
       if (obj.status === "success") {
@@ -3684,13 +3677,23 @@ class class_creditnote {
     var active_list = '<ul class="list-group">';
     for (const a in raw_active) {
       active_list += `
-        <li class="list-group-item cursor_pointer d-flex justify-content-between align-items-start" onclick="cls_creditnote.inspect(${raw_active[a].ai_creditnote_id})">
+        <li class="list-group-item cursor_pointer d-flex justify-content-between align-items-start" onclick="cls_creditnote.inspect(${
+          raw_active[a].ai_creditnote_id
+        })">
           <div class="ms-2 me-auto">
-            <div class="fw-bold"><h5>${raw_active[a].tx_creditnote_number} - ${raw_active[a].tx_client_name}</h5></div>
+            <div class="fw-bold"><h5>${raw_active[a].tx_creditnote_number} - ${
+              raw_active[a].tx_client_name
+            }</h5></div>
           </div>
-          <span class="badge bg-secondary fs_20">B/ ${(raw_active[a].tx_creditnote_nontaxable + raw_active[a].tx_creditnote_taxable + raw_active[a].tx_creditnote_tax).toFixed(2)}</span>
+          <span class="badge bg-secondary fs_20">B/ ${(
+            raw_active[a].tx_creditnote_nontaxable +
+            raw_active[a].tx_creditnote_taxable +
+            raw_active[a].tx_creditnote_tax
+          ).toFixed(2)}</span>
           &nbsp;&nbsp;&nbsp;
-          <span>${cls_general.datetime_converter(raw_active[a].created_at)}</span>
+          <span>${cls_general.datetime_converter(
+            raw_active[a].created_at,
+          )}</span>
         </li>
       `;
     }
@@ -3728,9 +3731,16 @@ class class_creditnote {
       article_list += `
         <li class="list-group-item d-flex justify-content-between align-items-start fs_20">
           <div class="ms-2 me-auto text-truncate">
-            ${article.tx_datacreditnote_quantity} - ${article.tx_commanddata_description}
+            ${article.tx_datacreditnote_quantity} - ${
+              article.tx_commanddata_description
+            }
           </div>
-          <span class="badge bg-secondary fs_20">${cls_general.val_price(price, 2, 1, 1)}</span>
+          <span class="badge bg-secondary fs_20">${cls_general.val_price(
+            price,
+            2,
+            1,
+            1,
+          )}</span>
         </li>
       `;
     });
@@ -3739,35 +3749,67 @@ class class_creditnote {
         <div class="row">
           <div class="col-md-6 col-lg-3">
             <label class="form-label" for="">Numero</label>
-            <input type="text" id="" class="form-control" value="${info.tx_creditnote_number}" readonly>
+            <input type="text" id="" class="form-control" value="${
+              info.tx_creditnote_number
+            }" readonly>
           </div>
           <div class="col-md-6 col-lg-3">
             <label class="form-label" for="">Fecha</label>
-            <input type="text" id="" class="form-control" value="${cls_general.datetime_converter(info.created_at)}" readonly>
+            <input type="text" id="" class="form-control" value="${cls_general.datetime_converter(
+              info.created_at,
+            )}" readonly>
           </div>
           <div class="col-md-12 col-lg-6">
             <label class="form-label" for="">Cliente</label>
-            <input type="text" id="" class="form-control" value="${info.tx_client_name}" readonly>
+            <input type="text" id="" class="form-control" value="${
+              info.tx_client_name
+            }" readonly>
           </div>
           <div class="col-md-6 col-lg-3">
             <label class="form-label" for="">No imponible</label>
-            <input type="text" id="" class="form-control" value="${cls_general.val_price(info.tx_creditnote_nontaxable, 2, 1, 1)}" readonly>
+            <input type="text" id="" class="form-control" value="${cls_general.val_price(
+              info.tx_creditnote_nontaxable,
+              2,
+              1,
+              1,
+            )}" readonly>
           </div>
           <div class="col-md-6 col-lg-3">
             <label class="form-label" for="">Imponible</label>
-            <input type="text" id="" class="form-control" value="${cls_general.val_price(info.tx_creditnote_taxable, 2, 1, 1)}" readonly>
+            <input type="text" id="" class="form-control" value="${cls_general.val_price(
+              info.tx_creditnote_taxable,
+              2,
+              1,
+              1,
+            )}" readonly>
           </div>
           <div class="col-md-6 col-lg-3">
             <label class="form-label" for="">Impuesto</label>
-            <input type="text" id="" class="form-control" value="${cls_general.val_price(info.tx_creditnote_tax, 2, 1, 1)}" readonly>
+            <input type="text" id="" class="form-control" value="${cls_general.val_price(
+              info.tx_creditnote_tax,
+              2,
+              1,
+              1,
+            )}" readonly>
           </div>
           <div class="col-md-6 col-lg-3">
             <label class="form-label" for="">Total</label>
-            <input type="text" id="" class="form-control" value="${cls_general.val_price((info.tx_creditnote_nontaxable + info.tx_creditnote_taxable + info.tx_creditnote_tax).toFixed(2), 2, 1, 1)}" readonly>
+            <input type="text" id="" class="form-control" value="${cls_general.val_price(
+              (
+                info.tx_creditnote_nontaxable +
+                info.tx_creditnote_taxable +
+                info.tx_creditnote_tax
+              ).toFixed(2),
+              2,
+              1,
+              1,
+            )}" readonly>
           </div>
           <div class="col-md-12 col-lg-6">
             <label class="form-label" for="">Motivo</label>
-            <input type="text" id="" class="form-control" value="${info.tx_creditnote_reason}" readonly>
+            <input type="text" id="" class="form-control" value="${
+              info.tx_creditnote_reason
+            }" readonly>
           </div>
         </div>
         <div class="row">
@@ -3868,7 +3910,9 @@ class class_creditnote {
           </div>
           <div class="col-md-6 col-lg-3">
             <label class="form-label" for="">Fecha</label>
-            <input type="text" id="" class="form-control" value="${cls_general.datetime_converter(date)}" readonly>
+            <input type="text" id="" class="form-control" value="${cls_general.datetime_converter(
+              date,
+            )}" readonly>
           </div>
           <div class="col-md-12 col-lg-6">
             <label class="form-label" for="">Cliente</label>
@@ -3959,7 +4003,7 @@ class class_creditnote {
         cls_creditnote.process(charge_slug);
       });
   }
-  generate_articlecharge(raw_article) {
+  async generate_articlecharge(raw_article) {
     var content = ``;
     raw_article.map((commanddata) => {
       if (commanddata.commanddata_status === 1) {
@@ -4065,6 +4109,7 @@ class class_creditnote {
       }
     });
 
+    // var selected = cls_creditnote.selected.find((commanddata, index) => { if (commanddata_id == commanddata.commanddata_id) { return index } });
     if (cls_general.is_empty_var(i) === 1) {
       cls_creditnote.selected.splice(i, 1);
     }
@@ -4925,7 +4970,7 @@ class class_client {
         var needles = str.split(" ");
         var raw_filtered = [];
         for (var i in haystack) {
-          if (raw_filtered.length === parseInt(limit)) {
+          if (i == limit) {
             break;
           }
           var ocurrencys = 0;
@@ -5181,17 +5226,9 @@ class class_client {
       });
       return false;
     }
-    var request_client = document.getElementById("requestClient").name;
-    if (
-      cls_general.is_empty_var(request_client) === 0 ||
-      request_client == "001"
-    ) {
-      var method = "POST";
-      var url = "/client/";
-    } else {
-      var method = "PUT";
-      var url = "/client/" + request_client;
-    }
+
+    var method = "POST";
+    var url = "/client/";
     var body = JSON.stringify({
       a: name,
       b: cif,
@@ -5206,75 +5243,98 @@ class class_client {
     var funcion = function (obj) {
       if (obj.status === "success") {
         cls_client.client_list = obj.data.client_list;
-        cls_command
-          .set_client(
-            obj.data.client.tx_client_slug,
-            obj.data.client.tx_client_name,
-            obj.data.client.tx_client_exempt,
-            `'${obj.data.client.tx_client_birthday}'`,
-          )
-          .cls_general.shot_toast_bs(obj.message, { bg: "text-bg-success" });
+        cls_client.index();
       } else {
         cls_general.shot_toast_bs(obj.message, { bg: "text-bg-warning" });
       }
     };
     cls_general.async_laravel_request(url, method, funcion, body);
   }
-  // update(client_slug) {
-  //   var name = cls_general.set_name(document.getElementById('clientName').value);
-  //   var cif = document.getElementById('clientCIF').value;
-  //   var dv = document.getElementById('clientDV').value;
-  //   var telephone = document.getElementById('clientTelephone').value;
-  //   var email = document.getElementById('clientEmail').value;
-  //   var direction = document.getElementById('clientDirection').value;
-  //   var exempt = (document.getElementById('clientExempt').checked) ? 1 : 0;
-  //   var taxpayer = document.getElementById('clientTaxpayer').value;
-  //   var status = (document.getElementById('clientStatus').checked) ? 1 : 0;
+  update(client_slug) {
+    var name = cls_general.set_name(
+      document.getElementById("clientName").value,
+    );
+    var cif = document.getElementById("clientCIF").value;
+    var dv = document.getElementById("clientDV").value;
+    var telephone = document.getElementById("clientTelephone").value;
+    var email = document.getElementById("clientEmail").value;
+    var direction = document.getElementById("clientDirection").value;
+    var exempt = document.getElementById("clientExempt").checked ? 1 : 0;
+    var taxpayer = document.getElementById("clientTaxpayer").value;
+    var status = document.getElementById("clientStatus").checked ? 1 : 0;
 
-  //   if (cls_general.is_empty_var(name) === 0 || cls_general.is_empty_var(cif) === 0) {
-  //     cls_general.shot_toast_bs('El campo nombre y C&eacute;dula no pueden estar vac&iacute;os', { bg: 'text-bg-warning' });
-  //     return false;
-  //   }
-  //   if (isNaN(dv)) {
-  //     cls_general.shot_toast_bs('D&iacute;gito verificador deben ser numeros', { bg: 'text-bg-warning' });
-  //     return false;
-  //   }
-  //   if (cls_general.is_empty_var(email) === 1 && cls_general.isEmail(email) != true) {
-  //     cls_general.shot_toast_bs('Verifique el Email', { bg: 'text-bg-warning' });
-  //     return false;
-  //   }
-  //   if (taxpayer != "102") {
-  //     var pattern = /\d/
-  //     if (cls_general.is_empty_var(dv) === 0) {
-  //       cls_general.shot_toast_bs('Falta ingresar el DV.', { bg: 'text-bg-warning' });
-  //       return false;
-  //     }
-  //     if (cls_general.is_empty_var(email) === 0) {
-  //       cls_general.shot_toast_bs('Debe ingresar el Email', { bg: 'text-bg-warning' });
-  //       return false;
-  //     }
-  //   } else {
-  //     var pattern = /^[1-9]-?\d{2,}-?\d{2,}$/
-  //   }
-  //   if (pattern.test(cif) != true) {
-  //     cls_general.shot_toast_bs('Verifique la C&eacute;dula/RUC', { bg: 'text-bg-warning' });
-  //     return false;
-  //   }
+    if (
+      cls_general.is_empty_var(name) === 0 ||
+      cls_general.is_empty_var(cif) === 0
+    ) {
+      cls_general.shot_toast_bs(
+        "El campo nombre y C&eacute;dula no pueden estar vac&iacute;os",
+        { bg: "text-bg-warning" },
+      );
+      return false;
+    }
+    if (isNaN(dv)) {
+      cls_general.shot_toast_bs("D&iacute;gito verificador deben ser numeros", {
+        bg: "text-bg-warning",
+      });
+      return false;
+    }
+    if (
+      cls_general.is_empty_var(email) === 1 &&
+      cls_general.isEmail(email) != true
+    ) {
+      cls_general.shot_toast_bs("Verifique el Email", {
+        bg: "text-bg-warning",
+      });
+      return false;
+    }
+    if (taxpayer != "102") {
+      var pattern = /\d/;
+      if (cls_general.is_empty_var(dv) === 0) {
+        cls_general.shot_toast_bs("Falta ingresar el DV.", {
+          bg: "text-bg-warning",
+        });
+        return false;
+      }
+      if (cls_general.is_empty_var(email) === 0) {
+        cls_general.shot_toast_bs("Debe ingresar el Email", {
+          bg: "text-bg-warning",
+        });
+        return false;
+      }
+    } else {
+      var pattern = /^[1-9]-?\d{2,}-?\d{2,}$/;
+    }
+    if (pattern.test(cif) != true) {
+      cls_general.shot_toast_bs("Verifique la C&eacute;dula/RUC", {
+        bg: "text-bg-warning",
+      });
+      return false;
+    }
 
-  //   var method = 'PUT';
-  //   var url = '/client/' + client_slug;
-  //   var body = JSON.stringify({ a: name, b: cif, c: dv, d: telephone, e: email, f: direction, g: exempt, h: taxpayer, i: status });
-  //   var funcion = function (obj) {
-  //     if (obj.status === 'success') {
-  //       cls_client.client_list = obj.data.client_list;
-  //       cls_client.index()
-  //     } else {
-  //       cls_general.shot_toast_bs(obj.message, { bg: 'text-bg-warning' });
-  //     }
-  //   }
-  //   cls_general.async_laravel_request(url, method, funcion, body);
-
-  // }
+    var method = "PUT";
+    var url = "/client/" + client_slug;
+    var body = JSON.stringify({
+      a: name,
+      b: cif,
+      c: dv,
+      d: telephone,
+      e: email,
+      f: direction,
+      g: exempt,
+      h: taxpayer,
+      i: status,
+    });
+    var funcion = function (obj) {
+      if (obj.status === "success") {
+        cls_client.client_list = obj.data.client_list;
+        cls_client.index();
+      } else {
+        cls_general.shot_toast_bs(obj.message, { bg: "text-bg-warning" });
+      }
+    };
+    cls_general.async_laravel_request(url, method, funcion, body);
+  }
   delete(client_slug) {
     var url = "/client/" + client_slug;
     var method = "DELETE";

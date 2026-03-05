@@ -172,7 +172,7 @@
                         <td><span id="span_returnYappi"></span></td>
                       </tr>
                       <tr>
-                        <th>Nequi</th>
+                        <th>PedidosYa</th>
                         <td class="table-secondary"><span id="span_totalNequi"></span></td>
                         <td><span id="span_incomeNequi"></span></td>
                         <td><span id="span_returnNequi"></span></td>
@@ -197,11 +197,11 @@
                       </tr>
                     </tbody>
                     <tfoot>
-                      <tr class="table-success">
-                        <td>Propinas: <span id="span_totaltip"></span></td>
-                        <td>Descuentos: <span id="span_totaldiscount"></span></td>
-                        <td>Devoluciones: <span id="span_totalcashback"></span></td>
-                        <td>Anulaciones: <span id="span_totalnull"></span></td>
+                      <td>Propinas: <span id="span_totaltip"></span></td>
+                      <td>Descuentos: <span id="span_totaldiscount"></span></td>
+                      <td>Devoluciones: <span id="span_totalcashback"></span></td>
+                      <td>Anulaciones: <span id="span_totalnull"></span></td>
+                      <td>Anulaciones: <span id="span_totalnull"></span></td>
                       </tr>
                       <tr class="table-success">
                         <td></td>
@@ -221,7 +221,6 @@
       </div>
     </div>
   </div>
-
   <!-- Modal -->
   <div class="modal fade  modal-lg" id="inspectCRModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-scrollable">
@@ -348,7 +347,7 @@
                           <td></td>
                         </tr>
                         <tr>
-                          <th>Nequi</th>
+                          <th>PedidosYa</th>
                           <td class="table-secondary"></td>
                           <td></td>
                           <td></td>
@@ -461,6 +460,7 @@
   </div>
 
   <!-- Modal LOGIN TO CREDITNOTE -->
+
   <div class="modal fade" id="login_creditnoteModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-scrollable">
       <div class="modal-content">
@@ -469,7 +469,6 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div id="" class="modal-body">
-
           <div id="container_form_logincode">
             <form method="POST" action="" id="form_logincode">
               @csrf
@@ -495,11 +494,7 @@
               </button>
             </div>
           </div>
-
-
-
           <form id="container_loginform" onsubmit="event.preventDefault();" style="display: none">
-
             <p>Ingrese una contrase&ntilde;a de administrador o supervisor.</p>
             <div class="form-group row">
               <label for="useremailCreditnote" class="col-md-4 col-form-label text-md-right">{{ __('Correo E.') }}</label>
@@ -527,75 +522,8 @@
             </div>
           </form>
         </div>
-        <div id="" class="modal-footer">
-        </div>
+        <div id="" class="modal-footer"></div>
       </div>
-    </div>
-  </div>
-
-  <input id="hd_charge_creditnote" type="hidden" class="form-control" required autocomplete="email" autofocus>
-  <input id="useremailCreditnote" type="email" class="form-control" name="useremailCreditnote" required
-    autocomplete="email" autofocus>
-
-  <div class="modal-content">
-    <div class="modal-header">
-      <h1 class="modal-title fs-5" id="">Ingresar Usuario</h1>
-      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-    </div>
-    <div id="" class="modal-body">
-      <div id="container_form_logincode_nullcommand">
-        <form method="POST" action="" id="form_logincode_nullcommand">
-          @csrf
-          <div class="form-group row">
-            <label for="logincode_nullcommand" class="col-md-4 col-form-label text-md-right">{{ __('Acceso') }}</label>
-            <div class="col-md-6 mb-3">
-              <input id="logincode_nullcommand" type="password" class="form-control" name="logincode_nullcommand" value=""
-                required autofocus>
-            </div>
-          </div>
-          <div class="form-group row mb-0">
-            <div class="col-md-12 text-center">
-              <button type="submit" id="submit_login" class="btn tmgreen_bg" style="display: none">
-                {{ __('Ingresar') }}
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
-      <div class="form-group row mb-3">
-        <div class="col-md-12 text-center">
-          <button type="button" id="btn_toggle_formlogin_nullcommand" class="btn btn-secondary">
-            {{ __('Ingreso Manual') }}
-          </button>
-        </div>
-      </div>
-      <form id="container_loginform_nullcommand" onsubmit="event.preventDefault();" style="display: none">
-        <p>Ingrese una contrase&ntilde;a de administrador o supervisor.</p>
-        <div class="form-group row">
-          <label for="useremailCancel" class="col-md-4 col-form-label text-md-right">{{ __('Correo E.') }}</label>
-          <div class="col-md-6 mb-3">
-            <input id="hd_command_cancel" type="hidden" class="form-control" required autocomplete="email" autofocus>
-            <input id="useremailCancel" type="email" class="form-control" name="useremailCancel" required
-              autocomplete="email" autofocus>
-          </div>
-        </div>
-        <div class="form-group row">
-          <label for="userpasswordCancel" class="col-md-4 col-form-label text-md-right">{{ __('Contraseña') }}</label>
-          <div class="col-md-6 mb-3">
-            <input id="userpasswordCancel" type="password" class="form-control" name="userpasswordCancel" required
-              autocomplete="current-password">
-          </div>
-        </div>
-        <div class="form-group row mb-0">
-          <div class="col-md-12 text-center">
-            <button type="button" id="btn_loginuser_cancel" class="btn tmgreen_bg">
-              {{ __('Ingresar') }}
-            </button>
-          </div>
-        </div>
-      </form>
-    </div>
-    <div id="" class="modal-footer">
     </div>
   </div>
 
@@ -629,8 +557,72 @@
             <div id="container_articlethumbnail" class="col-sm-12"></div>
           </div>
         </div>
-        <div id="articlelistModal_footer" class="modal-footer">
+        <div id="articlelistModal_footer" class="modal-footer"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal LOGIN TO CANCEL COMMANDDATA -->
+  <div class="modal fade" id="login_cancelModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="">Ingresar Usuario</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
+        <div id="" class="modal-body">
+          <div id="container_form_logincode_nullcommand">
+            <form method="POST" action="" id="form_logincode_nullcommand">
+              @csrf
+              <div class="form-group row">
+                <label for="logincode" class="col-md-4 col-form-label text-md-right">{{ __('Acceso') }}</label>
+                <div class="col-md-6 mb-3">
+                  <input id="logincode" type="password" class="form-control" name="logincode" value="" required autofocus>
+                </div>
+              </div>
+              <div class="form-group row mb-0">
+                <div class="col-md-12 text-center">
+                  <button type="submit" id="submit_login" class="btn tmgreen_bg" style="display: none">
+                    {{ __('Ingresar') }}
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="form-group row mb-3">
+            <div class="col-md-12 text-center">
+              <button type="button" id="btn_toggle_formlogin_nullcommand" class="btn btn-secondary">
+                {{ __('Ingreso Manual') }}
+              </button>
+            </div>
+          </div>
+          <form id="container_loginform_nullcommand" onsubmit="event.preventDefault();" style="display: none">
+            <p>Ingrese una contrase&ntilde;a de administrador o supervisor.</p>
+            <div class="form-group row">
+              <label for="useremailCancel" class="col-md-4 col-form-label text-md-right">{{ __('Correo E.') }}</label>
+              <div class="col-md-6 mb-3">
+                <input id="hd_command_cancel" type="hidden" class="form-control" required autocomplete="email" autofocus>
+                <input id="useremailCancel" type="email" class="form-control" name="useremailCancel" required
+                  autocomplete="email" autofocus>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="userpasswordCancel" class="col-md-4 col-form-label text-md-right">{{ __('Contraseña') }}</label>
+              <div class="col-md-6 mb-3">
+                <input id="userpasswordCancel" type="password" class="form-control" name="userpasswordCancel" required
+                  autocomplete="current-password">
+              </div>
+            </div>
+            <div class="form-group row mb-0">
+              <div class="col-md-12 text-center">
+                <button type="button" id="btn_loginuser_cancel" class="btn tmgreen_bg">
+                  {{ __('Ingresar') }}
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div id="" class="modal-footer"></div>
       </div>
     </div>
   </div>
@@ -643,10 +635,8 @@
           <h1 class="modal-title fs-5" id="commandModal_title">Modal title</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div id="commandModal_content" class="modal-body">
-        </div>
-        <div id="commandModal_footer" class="modal-footer">
-        </div>
+        <div id="commandModal_content" class="modal-body"></div>
+        <div id="commandModal_footer" class="modal-footer"></div>
       </div>
     </div>
   </div>
@@ -659,10 +649,8 @@
           <h1 class="modal-title fs-5" id="clientModal_title">Modal title</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div id="clientModal_content" class="modal-body">
-        </div>
-        <div id="clientModal_footer" class="modal-footer">
-        </div>
+        <div id="clientModal_content" class="modal-body"></div>
+        <div id="clientModal_footer" class="modal-footer"></div>
       </div>
     </div>
   </div>
@@ -688,7 +676,57 @@
     </div>
   </div>
 
+  <!-- Modal CHARGENOFE -->
+  <div class="modal fade" id="chargeNofeModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="chargeNofeModal_title">Cobros Sin FE</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div id="chargeNofeModal_content" class="modal-body">
+          <div class="row">
+            <div class="col-12">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Cliente</th>
+                    <th scope="col">Monto</th>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @foreach ($data['noFE'] as $item)
+                    <tr>
+                      <th scope="row">{{ $item->tx_charge_number }}</th>
+                      <td>{{ $item->tx_client_name }}</td>
+                      <td>{{ $item->tx_charge_total }}</td>
+                      <td>{{ $item->created_at }}</td>
+                      <td>
+                        <button type="button" class="btn btn-primary btn_nofe"
+                          onclick="cls_charge.charge_nofe('{{ $item->tx_charge_slug }}')">Facturar</button>
+                      </td>
+                    </tr>
+                  @endforeach
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div id="chargeNofeModal_footer" class="modal-footer">
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div id="container_request" class="row"></div>
+  @if($data['noCashregister'])
+    <div class="floating-pending-alert">
+      Hay usuarios con cajas pendientes por cerrar
+    </div>
+  @endif
 
 @endsection
 
@@ -706,8 +744,7 @@
     var api_url = <?php echo json_encode($data['api_url']); ?>;
     const cls_charge = new class_charge(canceled_request, api_url);
 
-    // const cls_command = new class_command;
-    var cls_command = new class_command;
+    const cls_command = new class_command;
 
     var paymentmethod = JSON.parse('<?php echo json_encode($data['paymentmethod']) ?>');
     const cls_paymentmethod = new class_paymentmethod(paymentmethod);
@@ -752,7 +789,11 @@
         }
       }, 60000);
       //cls_charge.api_login();
-    });
+      @if ($data['noFE'])
+        const modal = new bootstrap.Modal("#chargeNofeModal", {});
+        modal.show();
+      @endif
+            });
     var fecha = cls_general.getDate()
     document.getElementById('cashoutputDatefilter').value = cls_general.date_converter('ymd', 'dmy', fecha[0]);
     document.getElementById('cashoutputDateshow').innerHTML = cls_general.date_converter('ymd', 'dmy', fecha[0]);
