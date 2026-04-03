@@ -146,7 +146,7 @@ class chargeController extends Controller
             $received += $payment['amount'];
         }
         if ($price_sale['total'] > $received) {
-            return response()->json(['status' => 'failed', 'message' => 'Faltan pagos.']);
+            return response()->json(['status' => 'failed', 'message' => 'Faltan pagos.' . $price_sale['total'] . ' > ' . $received]);
         }
 
         $change = ($price_sale['total'] === $received) ? 0.00 : $received - $price_sale['total'] - $tip;
@@ -1419,6 +1419,12 @@ class chargeController extends Controller
         ];
     }
 
+    public function calculateSaleApi(Request $request)
+    {
+        $raw_price = $request->input('raw_price');
+        $price_sale = $this->calculate_sale($raw_price);
+        return ['status' => 'success', 'data' => $price_sale];
+    }
     public function report($from, $to)
     {
         $rs = tm_charge::select('tm_clients.tx_client_name', 'tm_clients.tx_client_cif', 'tm_clients.tx_client_dv', 'tm_charges.tx_charge_number', 'tm_charges.tx_charge_nontaxable', 'tm_charges.tx_charge_taxable', 'tm_charges.tx_charge_discount', 'tm_charges.tx_charge_tax', 'tm_charges.tx_charge_total', 'tm_charges.tx_charge_change', 'tm_charges.created_at', 'users.name as user_name')->join('tm_requests', 'tm_requests.request_ai_charge_id', 'tm_charges.ai_charge_id')->join('tm_clients', 'tm_clients.ai_client_id', 'tm_requests.request_ai_client_id')->join('users', 'users.id', 'tm_charges.charge_ai_user_id')->where('tm_charges.created_at', '>=', date('Y-m-d H:i:s', strtotime($from . " 00:00:01")))->where('tm_charges.created_at', '<=', date('Y-m-d H:i:s', strtotime($to . " 23:59:00")))->orderby('tm_charges.created_at')->get();

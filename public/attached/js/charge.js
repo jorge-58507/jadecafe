@@ -1012,7 +1012,7 @@ class class_charge {
     var url = "/command/" + request_slug + "/byrequest";
     var method = "GET";
     var body = "";
-    var funcion = function (obj) {
+    var funcion = async function (obj) {
       if (obj.status === "success") {
         cls_charge.render(request_slug);
         var content_command = cls_command.generate_articleprocesed(
@@ -1020,7 +1020,10 @@ class class_charge {
         );
         document.getElementById("container_commandlist").innerHTML =
           content_command.content;
-        let price = cls_general.calculate_sale(content_command.price);
+        let price = await cls_general.calculate_sale(content_command.price);
+        console.log(price);
+        if (!price) return; // Validación por si el cálculo falló
+
         document.getElementById("sp_gross").innerHTML =
           "B/. " + cls_general.val_price(price.gross_total, 2, 1, 1);
         document.getElementById("sp_discount").innerHTML =

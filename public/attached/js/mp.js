@@ -19,27 +19,18 @@ class general_funct {
   set_invalid(array_selector) {
     for (const a in array_selector) {
       // array_selector[a].classList.remove("");
-      array_selector[a].className +=
-        " is-invalid was-validated form-control:invalid";
+      array_selector[a].className += " is-invalid was-validated form-control:invalid";
     }
   }
   set_valid(array_selector) {
     for (const a in array_selector) {
-      array_selector[a].classList.remove(
-        "is-invalid",
-        "was-validated",
-        "form-control:invalid"
-      );
+      array_selector[a].classList.remove("is-invalid", "was-validated", "form-control:invalid");
       // array_selector[a].className += "";
     }
   }
   set_neutral(array_selector) {
     for (const a in array_selector) {
-      array_selector[a].classList.remove(
-        "is-invalid",
-        "was-validated",
-        "form-control:invalid"
-      );
+      array_selector[a].classList.remove("is-invalid", "was-validated", "form-control:invalid");
       // array_selector[a].classList.remove("");
     }
   }
@@ -58,8 +49,7 @@ class general_funct {
   }
   validate_date(inputText) {
     var valid = true;
-    var dateformat =
-      /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+    var dateformat = /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
     // Match the date format through regular expression
     if (inputText.value.match(dateformat)) {
       //Test which seperator is used '/' or '-'
@@ -120,11 +110,7 @@ class general_funct {
       if (cls_general.is_empty_var(form[x].value) === 0) {
         form[x].className += " is-invalid was-validated form-control:invalid";
       } else {
-        form[x].classList.remove(
-          "is-invalid",
-          "was-validated",
-          "form-control:invalid"
-        );
+        form[x].classList.remove("is-invalid", "was-validated", "form-control:invalid");
       }
     }
   }
@@ -142,12 +128,7 @@ class general_funct {
     }
   }
   is_empty_var(string) {
-    if (
-      string === undefined ||
-      string === null ||
-      string.length === 0 ||
-      /^\s+$/.test(string)
-    ) {
+    if (string === undefined || string === null || string.length === 0 || /^\s+$/.test(string)) {
       return 0; //Vacio
     } else {
       return 1; //Lleno
@@ -172,7 +153,7 @@ class general_funct {
     // Default options are marked with *
     var myHeaders = new Headers({
       "Content-Type": "application/json",
-      Authorization: `Bearer ` + api_token,
+      Authorization: `Bearer ` + api_token
     });
     var myInit = {
       method: method,
@@ -181,7 +162,7 @@ class general_funct {
       credentials: "same-origin",
       headers: myHeaders,
       redirect: "follow", // manual, *follow, error
-      referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+      referrerPolicy: "no-referrer" // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
     };
     if (body_json != "") {
       myInit["body"] = body_json;
@@ -201,13 +182,13 @@ class general_funct {
   ) {
     var myHeaders = new Headers({
       "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-      "Content-Type": "application/json",
+      "Content-Type": "application/json"
     });
     var myInit = {
       method: method,
       headers: myHeaders,
       mode: "cors",
-      cache: "default",
+      cache: "default"
     };
     if (body_json != "") {
       myInit["body"] = body_json;
@@ -251,13 +232,13 @@ class general_funct {
     var myHeaders = new Headers({
       "X-CSRF-TOKEN": element[0].getAttribute("content"),
       "Content-Type": "application/json",
-      Accept: "application/json",
+      Accept: "application/json"
     });
 
     var myInit = {
       method: method,
       headers: myHeaders,
-      credentials: "same-origin",
+      credentials: "same-origin"
     };
 
     if (body_json !== "") {
@@ -324,10 +305,7 @@ class general_funct {
     let fechaNacimiento = new Date(dateString);
     let edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
     let diferenciaMeses = hoy.getMonth() - fechaNacimiento.getMonth();
-    if (
-      diferenciaMeses < 0 ||
-      (diferenciaMeses === 0 && hoy.getDate() < fechaNacimiento.getDate())
-    ) {
+    if (diferenciaMeses < 0 || (diferenciaMeses === 0 && hoy.getDate() < fechaNacimiento.getDate())) {
       edad--;
     }
     return edad;
@@ -338,14 +316,7 @@ class general_funct {
 
     const hoy = fecha.getDate();
     const mesActual = fecha.getMonth() + 1;
-    return [
-      `${fecha.getFullYear()}-${
-        fecha.getMonth() > 8
-          ? fecha.getMonth() + 1
-          : "0" + (fecha.getMonth() + 1)
-      }-${fecha.getDate() > 9 ? fecha.getDate() : "0" + fecha.getDate()}`,
-      `${fecha.getHours()}:${fecha.getMinutes()}`,
-    ];
+    return [`${fecha.getFullYear()}-${fecha.getMonth() > 8 ? fecha.getMonth() + 1 : "0" + (fecha.getMonth() + 1)}-${fecha.getDate() > 9 ? fecha.getDate() : "0" + fecha.getDate()}`, `${fecha.getHours()}:${fecha.getMinutes()}`];
   }
   date_converter(from, to, string) {
     //Ymd,dmY,fecha
@@ -356,13 +327,7 @@ class general_funct {
       array_fecha[from_splited[a]] = raw_fecha[a];
     }
     var to_splited = to.split("");
-    return (
-      array_fecha[to_splited[0]] +
-      "-" +
-      array_fecha[to_splited[1]] +
-      "-" +
-      array_fecha[to_splited[2]]
-    );
+    return array_fecha[to_splited[0]] + "-" + array_fecha[to_splited[1]] + "-" + array_fecha[to_splited[2]];
   }
   datetime_converter(datetime) {
     var split = datetime.split(" ");
@@ -372,10 +337,7 @@ class general_funct {
   time_converter(datetime, ampm = 0) {
     var split = datetime.split(" ");
     var time_splited = split[1].split(":");
-    var H =
-      ampm === 1
-        ? cls_general.formatTimeShow(time_splited[0], time_splited[1])
-        : time_splited[0] + ":" + time_splited[1];
+    var H = ampm === 1 ? cls_general.formatTimeShow(time_splited[0], time_splited[1]) : time_splited[0] + ":" + time_splited[1];
     return H;
   }
   formatTimeShow(h_24, min) {
@@ -406,8 +368,7 @@ class general_funct {
           characters += "[]{}()<>";
           break;
         case "word":
-          characters +=
-            " abcdefghijklmnñopqrstuvwxyzáéíóúABCDEFGHIJKLMNÑOPQRSTUVWXYZÁÉÍÓÚ";
+          characters += " abcdefghijklmnñopqrstuvwxyzáéíóúABCDEFGHIJKLMNÑOPQRSTUVWXYZÁÉÍÓÚ";
           break;
       }
     }
@@ -431,7 +392,7 @@ class general_funct {
       autoClose: true,
       format: "dd-mm-yyyy",
       container: "body",
-      defaultDate: defaultDate,
+      defaultDate: defaultDate
     });
   }
   open_timepicker(originTime) {
@@ -439,16 +400,13 @@ class general_funct {
     var instances_timepicker = M.Timepicker.init(timepicker, {
       autoClose: true,
       container: "body",
-      defaultTime: originTime,
+      defaultTime: originTime
     });
   }
   requiredFields(raw_id) {
     //   es un array que contiene los ID de los campos
     for (var i in raw_id) {
-      if (
-        document.getElementById(raw_id[i]).value.length === 0 ||
-        /^\s+$/.test(document.getElementById(raw_id[i]).value)
-      ) {
+      if (document.getElementById(raw_id[i]).value.length === 0 || /^\s+$/.test(document.getElementById(raw_id[i]).value)) {
         document.getElementById(raw_id[i]).classList.add("invalid");
       } else {
         document.getElementById(raw_id[i]).classList.remove("invalid");
@@ -460,11 +418,7 @@ class general_funct {
     //   es un array que contiene los ID de los campos
     for (var i in raw_id) {
       var field_alt = document.getElementById(raw_id[i]).getAttribute("alt");
-      if (
-        field_alt === null ||
-        field_alt.length === 0 ||
-        /^\s+$/.test(field_alt)
-      ) {
+      if (field_alt === null || field_alt.length === 0 || /^\s+$/.test(field_alt)) {
         document.getElementById(raw_id[i]).classList.add("invalid");
       } else {
         document.getElementById(raw_id[i]).classList.remove("invalid");
@@ -478,11 +432,7 @@ class general_funct {
     var valid = true;
     for (var x in inputs) {
       var selector = document.getElementsByName(inputs[x]);
-      if (
-        (" " + selector[0].className + " ")
-          .replace(/[\n\t]/g, " ")
-          .indexOf(" invalid ") > -1
-      ) {
+      if ((" " + selector[0].className + " ").replace(/[\n\t]/g, " ").indexOf(" invalid ") > -1) {
         valid = false;
       }
     }
@@ -530,11 +480,7 @@ class general_funct {
     //selector = STRING
     //   #####   IMPLEMENTACION DE TOOGLE
     var elem = document.getElementById(selector);
-    if (
-      (" " + elem.className + " ")
-        .replace(/[\n\t]/g, " ")
-        .indexOf(" toggle_on ") > -1
-    ) {
+    if ((" " + elem.className + " ").replace(/[\n\t]/g, " ").indexOf(" toggle_on ") > -1) {
       elem.classList.remove("toggle_on");
       elem.classList.add("toggle_off");
     } else {
@@ -566,9 +512,7 @@ class general_funct {
     }
     str = parseFloat(str); //Convertir a float
     if (decimal > 0) {
-      var pat = new RegExp(
-        "(^[-][0-9]{1}|^[0-9]+|[0-9]+)([.][0-9]{1," + decimal + "})?$"
-      );
+      var pat = new RegExp("(^[-][0-9]{1}|^[0-9]+|[0-9]+)([.][0-9]{1," + decimal + "})?$");
       if (!pat.test(str)) {
         return false;
       }
@@ -604,21 +548,11 @@ class general_funct {
         str_splited[0] = parseFloat(str_splited[0]) + parseFloat(raw_split[0]);
       }
       str_splited[0] = str_splited[0].toString();
-      str =
-        decimal > 0
-          ? str_splited[0].replace(/(.)(?=(\d{3})+$)/g, "$1,") +
-            "." +
-            str_splited[1]
-          : str_splited[0];
+      str = decimal > 0 ? str_splited[0].replace(/(.)(?=(\d{3})+$)/g, "$1,") + "." + str_splited[1] : str_splited[0];
     } else {
       if (refill === 1) {
         // REFILL
-        str =
-          decimal > 0
-            ? str_splited[0].replace(/(.)(?=(\d{3})+$)/g, "$1,") +
-              "." +
-              decimal_part
-            : str_splited[0];
+        str = decimal > 0 ? str_splited[0].replace(/(.)(?=(\d{3})+$)/g, "$1,") + "." + decimal_part : str_splited[0];
       }
     }
     return str;
@@ -644,9 +578,7 @@ class general_funct {
     // var str = str / pow;
 
     if (decimal > 0) {
-      var pat = new RegExp(
-        "(^[-][0-9]{1}|^[0-9]+|[0-9]+)([.][0-9]{1," + decimal + "})?$"
-      );
+      var pat = new RegExp("(^[-][0-9]{1}|^[0-9]+|[0-9]+)([.][0-9]{1," + decimal + "})?$");
       if (!pat.test(str)) {
         return false;
       }
@@ -686,13 +618,11 @@ class general_funct {
         str_splited[1] = raw_split[1];
         str_splited[0] = parseFloat(str_splited[0]) + parseFloat(raw_split[0]);
       }
-      str =
-        decimal > 0 ? str_splited[0] + "." + str_splited[1] : str_splited[0];
+      str = decimal > 0 ? str_splited[0] + "." + str_splited[1] : str_splited[0];
     } else {
       if (refill === 1) {
         // REFILL
-        str =
-          decimal > 0 ? str_splited[0] + "." + decimal_part : str_splited[0];
+        str = decimal > 0 ? str_splited[0] + "." + decimal_part : str_splited[0];
       }
     }
     return str;
@@ -717,9 +647,7 @@ class general_funct {
     if (limitField.value.length > limitNum) {
       limitField.value = limitField.value.substring(0, limitNum);
       if (toast === 1) {
-        cls_general.shot_toast_bs(
-          "Se excedi&oacute; la cantidad de caracteres"
-        );
+        cls_general.shot_toast_bs("Se excedi&oacute; la cantidad de caracteres");
       }
     }
     return limitField.value.length;
@@ -742,112 +670,63 @@ class general_funct {
     $(".pulse_shadow").removeClass("pulse_shadow"); //QUITAR EL PULSE_SHADOW
     for (const a in btn_array) {
       //AGREGAR EL PULSE
-      if (
-        document.getElementById(btn_array[a]).tagName === "DIV" ||
-        document.getElementById(btn_array[a]).tagName === "SPAN"
-      ) {
-        if (
-          document
-            .getElementById(btn_array[a])
-            .classList.contains("pulse_shadow") === false
-        ) {
+      if (document.getElementById(btn_array[a]).tagName === "DIV" || document.getElementById(btn_array[a]).tagName === "SPAN") {
+        if (document.getElementById(btn_array[a]).classList.contains("pulse_shadow") === false) {
           document.getElementById(btn_array[a]).classList.add("pulse_shadow");
         }
       } else {
-        if (
-          document.getElementById(btn_array[a]).classList.contains("pulse") ===
-          false
-        ) {
+        if (document.getElementById(btn_array[a]).classList.contains("pulse") === false) {
           document.getElementById(btn_array[a]).classList.add("pulse");
         }
       }
     }
     document.getElementById("div_tutorial").innerHTML = instruction; //LLENAR EL CONTAINER
     $("#div_tutorial").show(500);
-    document.getElementById("div_tutorial").style.textShadow =
-      "2px 4px 4px #000";
+    document.getElementById("div_tutorial").style.textShadow = "2px 4px 4px #000";
     setTimeout(() => {
       document.getElementById("div_tutorial").style.textShadow = "";
     }, 500);
   }
 
   async calculate_sale(raw_price) {
-    //[{PRICE,discount,tax, quantity}]
     if (raw_price.length > 0) {
       var url = "/request/calculate";
       var method = "POST";
       var body = JSON.stringify({ raw_price: raw_price });
+
       var funcion = function (obj) {
         if (obj.status === "success") {
           const raw_calculate = obj.data;
           return {
-            taxable: cls_general.val_price(raw_calculate.subtotal, 2, 1, 1),
-            nontaxable: cls_general.val_price(raw_calculate.st_notaxable, 2, 1, 1),
-            gross_total: cls_general.val_price(raw_calculate.gross_total, 2, 1, 1),
-            subtotal: cls_general.val_price(raw_calculate.subtotal + raw_calculate.st_notaxable, 2, 1, 1),
-            total: cls_general.val_price(raw_calculate.total, 2, 1, 1),
-            discount: cls_general.val_price(raw_calculate.discount, 2, 1, 1),
-            tax: cls_general.val_price(raw_calculate.tax, 2, 1, 1),
+            taxable: raw_calculate.subtotal,
+            nontaxable: raw_calculate.st_notaxable,
+            gross_total: raw_calculate.gross_total,
+            subtotal: raw_calculate.subtotal + raw_calculate.st_notaxable,
+            total: raw_calculate.total,
+            discount: raw_calculate.discount,
+            tax: raw_calculate.tax
           };
         } else {
           cls_general.shot_toast_bs(obj.message, { bg: "text-bg-warning" });
+          return null; // Retornamos algo para que la cadena no se rompa
         }
       };
+
+      // Aquí el await espera a que async_laravel_request termine,
+      // y esta a su vez devuelve lo que 'funcion' retornó arriba.
       return await cls_general.async_laravel_request(url, method, funcion, body);
-    }else{
+    } else {
+      // Retorno directo para el caso vacío
       return {
-        taxable:      cls_general.val_price(0, 2, 1, 1),
-        nontaxable:   cls_general.val_price(0, 2, 1, 1),
-        gross_total:  cls_general.val_price(0, 2, 1, 1),
-        subtotal:     cls_general.val_price(0, 2, 1, 1),
-        total:        cls_general.val_price(0, 2, 1, 1),
-        discount:     cls_general.val_price(0, 2, 1, 1),
-        tax:          cls_general.val_price(0, 2, 1, 1),
+        taxable: 0,
+        nontaxable: 0,
+        gross_total: 0,
+        subtotal: 0,
+        total: 0,
+        discount: 0,
+        tax: 0
       };
     }
-
-    /*
-    // calcular desc (redondear) RESTAR DESC
-    // calcular imp (redondear) SUMAR IMPUESTO
-    // MULTIPLICAR CNTIDAD
-    var ttl_nontaxable = 0;
-    var ttl_taxable = 0;
-    var ttl_gross = 0;
-    var ttl_discount = 0;
-    var ttl_tax = 0;
-    var subtotal = 0;
-    var total = 0;
-    raw_price.map((article) => {
-      var discount = (article.price * article.discount)/100;
-      discount = cls_general.val_dec(discount, 2, 1, 1);
-      var price_discount = parseFloat(article.price) - parseFloat(discount);
-      var tax = (price_discount*article.tax)/100
-      tax = cls_general.val_dec(tax, 2, 1, 1);
-      var price_tax = parseFloat(price_discount) + parseFloat(tax);
-      
-      if (article.tax > 0) {
-        ttl_taxable += article.quantity * article.price;
-      }else{
-        ttl_nontaxable += article.quantity * article.price;
-      }
-      ttl_gross     += article.quantity * article.price;
-      subtotal      += article.quantity * price_discount;
-      total         += article.quantity * price_tax;
-      ttl_discount  += article.quantity * discount;
-      ttl_tax       += article.quantity * tax;
-
-    })
-    return { 
-      taxable:      cls_general.val_price(ttl_taxable, 2, 1, 1),
-      nontaxable:   cls_general.val_price(ttl_nontaxable, 2, 1, 1),
-      gross_total:  cls_general.val_price(ttl_gross, 2, 1, 1), 
-      subtotal:     cls_general.val_price(subtotal, 2, 1, 1), 
-      // total: total,
-      total:        cls_general.val_price(total, 2, 1, 1),
-      discount:     cls_general.val_price(ttl_discount, 2, 1, 1), 
-      tax:          cls_general.val_price(ttl_tax, 2, 1, 1)
-    }*/
   }
-
   //   #######################     GENERALES
 }
