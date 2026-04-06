@@ -453,10 +453,22 @@ class general_funct {
   }
   disable_submit(button, enable = 1) {
     button.disabled = true;
-    if (enable === 1) {
-      setTimeout(() => {
-        button.disabled = false;
-      }, 5000);
+    switch (enable) {
+      case 1:
+        setTimeout(() => {
+          button.disabled = false;
+        }, 5000);
+        
+        break;
+
+      case 0:
+          break;
+    
+      default:
+        setTimeout(() => {
+          button.disabled = false;
+        }, enable);
+        break;
     }
   }
   set_sidenav(url) {

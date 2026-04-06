@@ -1021,7 +1021,6 @@ class class_charge {
         document.getElementById("container_commandlist").innerHTML =
           content_command.content;
         let price = await cls_general.calculate_sale(content_command.price);
-        console.log(price);
         if (!price) return; // Validación por si el cálculo falló
 
         document.getElementById("sp_gross").innerHTML =
@@ -1403,7 +1402,7 @@ class class_charge {
     document.getElementById("btn_chargePrint").addEventListener("click", () => {
       cls_charge.loginuser_reprint(charge_slug);
     });
-  }
+  } 
   loginuser_creditnote(charge_slug) {
     document.getElementById("hd_charge_creditnote").value = charge_slug;
     const modal_inspect = bootstrap.Modal.getInstance("#inspectModal");
@@ -1879,7 +1878,7 @@ class class_command {
               cls_command.generate_articleprocesed_newsale(
                 cls_command.command_procesed,
               );
-            var total_sale = cls_general.calculate_sale(
+            var total_sale = await cls_general.calculate_sale(
               content_command_procesed.price,
             );
             document.getElementById("commandList").innerHTML =
@@ -2228,7 +2227,7 @@ class class_command {
       var url = "/commanddatalastrequest/";
       var method = "POST";
       var body = JSON.stringify({ a: request_slug, b: raw_article });
-      var funcion = function (obj) {
+      var funcion = async function (obj) {
         if (obj.status === "success") {
           cls_general.shot_toast_bs(obj.message, { bg: "text-bg-success" });
 
@@ -2238,7 +2237,7 @@ class class_command {
           document.getElementById("container_commandlist").innerHTML =
             content_command.content;
 
-          let price = cls_general.calculate_sale(content_command.price);
+          let price = await cls_general.calculate_sale(content_command.price);
           document.getElementById("sp_gross").innerHTML =
             "B/. " + cls_general.val_price(price.gross_total, 2, 1, 1);
           document.getElementById("sp_discount").innerHTML =
@@ -2268,16 +2267,14 @@ class class_command {
       cls_general.async_laravel_request(url, method, funcion, body);
     }
   }
-  render_articleselected() {
-    var content = cls_command.generate_articleselected(
-      cls_command.command_list,
-    );
+  async render_articleselected() {
+    var content = await cls_command.generate_articleselected(cls_command.command_list);
     document.getElementById("article_selected").innerHTML = content.content;
     document.getElementById("span_commandTotal").innerHTML =
       "<h5>Total: B/ " + content.price_sale.total + "</h5>";
   }
 
-  generate_articleselected(command_list) {
+  async generate_articleselected(command_list) {
     var content = '<div class="accordion" id="">';
     var raw_price = [];
     command_list.map((article, index) => {
@@ -2331,7 +2328,7 @@ class class_command {
         quantity: article.quantity,
       });
     });
-    var price_sale = cls_general.calculate_sale(raw_price);
+    var price_sale = await cls_general.calculate_sale(raw_price);
     content += "</div>";
     return { content: content, price_sale: price_sale };
   }
@@ -2485,10 +2482,9 @@ class class_command {
       e: consumption,
       f: observation,
     });
-    var funcion = function (obj) {
+    var funcion = async function (obj) {
       if (obj.status === "success") {
-        document.getElementById("btn_commandprocess").name =
-          obj.data.request.tx_request_slug;
+        document.getElementById("btn_commandprocess").name = obj.data.request.tx_request_slug;
         document.getElementById("container_buttonUpdateInfo").innerHTML =
           `<button class="btn btn-lg btn-info" type="button" onclick="cls_general.disable_submit(this); cls_request.update_info('${obj.data.request.tx_request_slug}')">Actualizar</button>`;
         cls_command.command_procesed = obj.data.command_procesed;
@@ -2498,7 +2494,7 @@ class class_command {
             cls_command.command_procesed,
           );
         cls_command.render_articleselected();
-        var total_sale = cls_general.calculate_sale(
+        var total_sale = await cls_general.calculate_sale(
           content_command_procesed.price,
         );
 
@@ -2566,7 +2562,7 @@ class class_command {
       e: consumption,
       f: observation,
     });
-    var funcion = function (obj) {
+    var funcion = async function (obj) {
       if (obj.status === "success") {
         cls_command.command_procesed = obj.data.command_procesed;
         cls_command.command_list = [];
@@ -2575,7 +2571,7 @@ class class_command {
             cls_command.command_procesed,
           );
         cls_command.render_articleselected();
-        var total_sale = cls_general.calculate_sale(
+        var total_sale = await cls_general.calculate_sale(
           content_command_procesed.price,
         );
 
@@ -3582,7 +3578,7 @@ class class_payment {
     cls_payment.render();
   }
   process(btn, request_slug) {
-    cls_general.disable_submit(btn);
+    cls_general.disable_submit(btn,30000);
     var raw_payment = cls_payment.payment;
     let received = 0;
     raw_payment.map((payment) => {
@@ -3606,7 +3602,7 @@ class class_payment {
       c: cls_payment.giftcard,
       d: cls_charge.tip,
     });
-    var funcion = function (obj) {
+    var funcion = async function (obj) {
       if (obj.status === "success") {
         cls_general.shot_toast_bs(obj.message, { bg: "text-bg-success" });
         cls_payment.payment = [];

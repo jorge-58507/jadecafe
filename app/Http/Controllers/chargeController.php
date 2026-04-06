@@ -207,8 +207,9 @@ class chargeController extends Controller
         } else {
             $birthday_congrats = 0;
         }
-
-        if (!$this->checkInternet()) {
+        
+        $checkInternet = $this->checkInternet();
+        if (!$checkInternet) {
             $this->print_command($charge_data['charge']['tx_charge_number'], $charge_data['charge']['created_at'], $charge_data['charge']['tx_client_name'], $charge_data['charge']['tx_client_cif'] . ' DV' . $charge_data['charge']['tx_client_dv'], $charge_data['article']);
             $this->print_receipt($charge_data['charge']['tx_charge_number'], $charge_data['charge']['created_at'], $charge_data['charge']['tx_client_name'], $charge_data['charge']['tx_client_cif'] . ' DV' . $charge_data['charge']['tx_client_dv'], $charge_data['article'], $charge_data['charge']['tx_charge_nontaxable'] + $charge_data['charge']['tx_charge_taxable'], $charge_data['charge']['tx_charge_discount'], $charge_data['charge']['tx_charge_tax'], $charge_data['charge']['tx_charge_total'], $charge_data['payment'], $charge_data['charge']['tx_charge_change'], $charge_data['charge']['user_name'], $birthday_congrats, $charge_data['charge']['tx_charge_tip'], $charge_data['charge']['tx_client_point']);
             return response()->json(['status' => 'failed', 'message' => 'No hay conexion a internet.']);
@@ -233,6 +234,7 @@ class chargeController extends Controller
                 $charge_data['charge']['tx_client_point'],
             );
         }
+        
         if ($request->input('e') > 0) {
             $response = $this->fe_send(
                 $charge_data['charge']['tx_charge_number'],
@@ -828,6 +830,7 @@ class chargeController extends Controller
 
         // Cut the receipt
         $printer->cut();
+        $printer->close();
 
     }
     public function send_nofe(Request $request)
